@@ -1,169 +1,169 @@
-# Lesson 2: Getting Started with Docker
+# Урок 2: Начало работы с Docker
 
-## Introduction to Docker
+## Введение в Docker
 
-Docker is an open-source platform that automates the deployment, scaling, and management of applications using containerization. With Docker, you can easily create, deploy, and run applications in containers, ensuring consistency across different environments.
+Docker — это платформа с открытым исходным кодом, которая автоматизирует развертывание, масштабирование и управление приложениями с помощью контейнеризации. С Docker вы можете легко создавать, развертывать и запускать приложения в контейнерах, обеспечивая согласованность в различных средах.
 
-## Step 1: Install Docker on Your Local Machine
+## Шаг 1: Установка Docker на локальном компьютере
 
-### For Windows
+### Для Windows
 
-1. **Download Docker Desktop**:
-   - Go to the [Docker Desktop for Windows page](https://www.docker.com/products/docker-desktop) and download the installer.
+1. **Загрузите Docker Desktop**:
+- Перейдите на страницу [Docker Desktop для Windows](https://www.docker.com/products/docker-desktop) и загрузите установщик.
 
-2. **Install Docker Desktop**:
-   - Run the downloaded installer and follow the on-screen instructions. Ensure that you enable the WSL 2 feature if prompted.
+2. **Установите Docker Desktop**:
+- Запустите загруженный установщик и следуйте инструкциям на экране. Убедитесь, что вы включили функцию WSL 2, если будет предложено.
 
-3. **Start Docker Desktop**:
-   - After installation, launch Docker Desktop from your Start menu. It may take a few moments for Docker to start.
+3. **Запустите Docker Desktop**:
+- После установки запустите Docker Desktop из меню «Пуск». Для запуска Docker может потребоваться несколько минут.
 
-### For macOS
+### Для macOS
 
-1. **Download Docker Desktop**:
-   - Visit the [Docker Desktop for Mac page](https://www.docker.com/products/docker-desktop) and download the installer.
+1. **Скачать Docker Desktop**:
+- Посетите страницу [Docker Desktop для Mac](https://www.docker.com/products/docker-desktop) и загрузите установщик.
 
-2. **Install Docker Desktop**:
-   - Open the downloaded `.dmg` file and drag the Docker icon to your Applications folder.
+2. **Установить Docker Desktop**:
+- Откройте загруженный файл `.dmg` и перетащите значок Docker в папку Applications.
 
-3. **Start Docker Desktop**:
-   - Launch Docker from your Applications folder. Wait for Docker to initialize.
+3. **Запустить Docker Desktop**:
+- Запустить Docker из папки Applications. Подождите, пока Docker инициализируется.
 
-### For Linux
+### Для Linux
 
-1. **Install Docker Engine**:
-   - Open your terminal and run the following commands based on your Linux distribution:
+1. **Установите Docker Engine**:
+- Откройте терминал и выполните следующие команды в зависимости от вашего дистрибутива Linux:
 
-   - **For Ubuntu**:
-     ```bash
-     sudo apt update
-     sudo apt install docker.io
-     ```
+- **Для Ubuntu**:
+```bash
+sudo apt update
+sudo apt install docker.io
+```
 
-   - **For CentOS**:
-     ```bash
-     sudo yum install docker
-     ```
+- **Для CentOS**:
+```bash
+sudo yum install docker
+```
 
-   - **For Fedora**:
-     ```bash
-     sudo dnf install docker
-     ```
+- **Для Fedora**:
+```bash
+sudo dnf install docker
+```
 
-2. **Start Docker**:
-   - After installation, start the Docker service:
-     ```bash
-     sudo systemctl start docker
-     ```
+2. **Запустите Docker**:
+- После установки запустите службу Docker:
+```bash
+sudo systemctl start docker
+```
 
-3. **Enable Docker to Start on Boot**:
-   ```bash
-   sudo systemctl enable docker
-   ```
+3. **Включите Docker для запуска при загрузке**:
+```bash
+sudo systemctl enable docker
+```
 
-## Step 2: Verify the Installation
+## Шаг 2. Проверка установки
 
-To ensure Docker is installed correctly, open your terminal or command prompt and run the following command:
+Чтобы убедиться, что Docker установлен правильно, откройте терминал или командную строку и запустите следующая команда:
 
 ```bash
 docker --version
 ```
 
-You should see output similar to:
+Вы должны увидеть вывод, похожий на:
 
 ```
 Docker version 20.10.7, build f0df350
 ```
 
-Next, run the following command to verify that Docker is running:
+Далее выполните следующую команду, чтобы убедиться, что Docker запущен:
 
 ```bash
 docker run hello-world
 ```
 
-This command downloads a test image and runs it in a container. If everything is working correctly, you will see a message confirming that Docker is installed successfully.
+Эта команда загружает тестовый образ и запускает его в контейнере. Если все работает правильно, вы увидите сообщение, подтверждающее, что Docker успешно установлен.
 
-## Step 3: Familiarize Yourself with the Docker CLI
+## Шаг 3: Ознакомьтесь с Docker CLI
 
-The Docker Command Line Interface (CLI) allows you to interact with the Docker daemon to manage containers, images, and other resources. Here are some basic commands to get you started:
+Интерфейс командной строки Docker (CLI) позволяет взаимодействовать с демоном Docker для управления контейнерами, образами и другими ресурсами. Вот несколько основных команд, с которых можно начать:
 
-### 1. **List Docker Images**
+### 1. **Список образов Docker**
 
-To view the images you have on your local machine, use:
+Чтобы просмотреть образы на локальном компьютере, используйте:
 
 ```bash
 docker images
 ```
 
-### 2. **List Running Containers**
+### 2. **Список запущенных контейнеров**
 
-To see the containers that are currently running, use:
+Чтобы просмотреть контейнеры, которые в данный момент запущены, используйте:
 
 ```bash
 docker ps
 ```
 
-### 3. **List All Containers**
+### 3. **Список всех контейнеров**
 
-To view all containers, including those that are stopped, use:
+Чтобы просмотреть все контейнеры, включая остановленные, используйте:
 
 ```bash
 docker ps -a
 ```
 
-### 4. **Pull an Image from Docker Hub**
+### 4. **Извлечение образа из Docker Hub**
 
-To download an image from Docker Hub (the default registry), use:
+Чтобы загрузить образ из Docker Hub (реестр по умолчанию), используйте:
 
 ```bash
 docker pull <image-name>
 ```
 
-For example, to pull the latest version of the Ubuntu image:
+Например, чтобы извлечь последнюю версию образа Ubuntu:
 
 ```bash
 docker pull ubuntu
 ```
 
-### 5. **Run a Container**
+### 5. **Запустить контейнер**
 
-To create and run a new container from an image, use:
+Чтобы создать и запустить новый контейнер из образа, используйте:
 
 ```bash
 docker run -it <image-name>
 ```
 
-For example, to run an interactive Ubuntu container:
+Например, чтобы запустить интерактивный контейнер Ubuntu:
 
 ```bash
 docker run -it ubuntu
 ```
 
-### 6. **Stop a Running Container**
+### 6. **Остановить работающий контейнер**
 
-To stop a running container, use:
+Чтобы остановить работающий контейнер, используйте:
 
 ```bash
 docker stop <container-id>
 ```
 
-You can find the container ID by using the `docker ps` command.
+Идентификатор контейнера можно узнать с помощью команды `docker ps`.
 
-### 7. **Remove a Container**
+### 7. **Удаление контейнера**
 
-To remove a stopped container, use:
+Чтобы удалить остановленный контейнер, используйте:
 
 ```bash
 docker rm <container-id>
 ```
 
-### 8. **Remove an Image**
+### 8. **Удаление образа**
 
-To remove an image from your local machine, use:
+Чтобы удалить образ с локальной машины, используйте:
 
 ```bash
 docker rmi <image-name>
 ```
 
-## Conclusion
+## Заключение
 
-In this lesson, you learned how to install Docker on your local machine and verify the installation. You also familiarized yourself with basic Docker CLI commands to manage images and containers. In the next lesson, we will dive deeper into understanding Docker images and containers, exploring how to create and manage them effectively.
+В этом уроке вы узнали, как установить Docker на локальную машину и проверить установку. Вы также познакомились с основными командами Docker CLI для управления образами и контейнерами. В следующем уроке мы более подробно рассмотрим образы и контейнеры Docker, изучив, как эффективно их создавать и управлять ими.
