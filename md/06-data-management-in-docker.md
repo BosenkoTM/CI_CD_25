@@ -1,100 +1,101 @@
-# Lesson 6: Data Management in Docker
+# Урок 6: Управление данными в Docker
 
-## Introduction to Data Management in Docker
+## Введение в управление данными в Docker
 
-Data persistence is a critical aspect of managing applications in Docker containers. By default, data stored inside a container is ephemeral, meaning it is lost when the container is removed. To manage data effectively, Docker provides two primary mechanisms: **volumes** and **bind mounts**. This lesson will explore both methods and how to use them for data persistence in your applications.
+Сохранение данных — важный аспект управления приложениями в контейнерах Docker. По умолчанию данные, хранящиеся внутри контейнера, являются эфемерными, то есть они теряются при удалении контейнера. Для эффективного управления данными Docker предоставляет два основных механизма: **том**(volumes) и **связанные монтирования**(bind mounts). В этом уроке будут рассмотрены оба метода и их использование для сохранения данных в ваших приложениях.
 
-## Understanding Volumes
+## Понимание томов
 
-**Volumes** are a preferred way to store data in Docker. They are managed by Docker and provide several advantages over storing data within the container's filesystem.
+**Том** — предпочтительный способ хранения данных в Docker. Они управляются Docker и обеспечивают ряд преимуществ по сравнению с хранением данных в файловой системе контейнера.
 
-### Key Features of Volumes:
-- **Managed by Docker**: Docker handles the creation, storage, and management of volumes.
-- **Persistent Storage**: Data stored in volumes persists even after the container is stopped or removed.
-- **Sharing Data**: Volumes can be shared between multiple containers, making it easy to manage data across different services.
-- **Performance**: Volumes are optimized for performance, especially for I/O operations.
+### Основные характеристики томов:
+- **Управление Docker**: Docker управляет созданием, хранением и управлением томами.
+- **Постоянное хранилище**: данные, хранящиеся в томах, сохраняются даже после остановки или удаления контейнера.
 
-### Creating and Using Volumes
+- **Общий доступ к данным**: тома могут совместно использоваться несколькими контейнерами, что упрощает управление данными в разных сервисах.
+- **Производительность**: тома оптимизированы для производительности, особенно для операций ввода-вывода.
 
-1. **Create a Volume**: You can create a volume using the following command:
+### Создание и использование томов
 
-   ```bash
-   docker volume create my-volume
-   ```
+1. **Создание тома**: вы можете создать том с помощью следующей команды:
 
-2. **Run a Container with a Volume**: To use the volume in a container, you can mount it using the `-v` or `--mount` flag:
+```bash
+docker volume create my-volume
+```
 
-   ```bash
-   docker run -d --name my-container -v my-volume:/data nginx
-   ```
+2. **Запуск контейнера с томом**: чтобы использовать том в контейнере, вы можете смонтировать его с помощью флага `-v` или `--mount`:
 
-   In this example, the volume `my-volume` is mounted to the `/data` directory inside the container.
+```bash
+docker run -d --name my-container -v my-volume:/data nginx
+```
 
-3. **Inspect a Volume**: To view details about a specific volume, use:
+В этом примере том `my-volume` смонтирован в каталог `/data` внутри контейнера.
 
-   ```bash
-   docker volume inspect my-volume
-   ```
+3. **Проверка тома**: Чтобы просмотреть сведения о конкретном томе, используйте:
 
-4. **List All Volumes**: To see all volumes on your system, run:
+```bash
+docker volume inspect my-volume
+```
 
-   ```bash
-   docker volume ls
-   ```
+4. **Список всех томов**: Чтобы просмотреть все тома в вашей системе, выполните:
 
-5. **Remove a Volume**: To remove a volume that is no longer needed, ensure that no containers are using it, then run:
+```bash
+docker volume ls
+```
 
-   ```bash
-   docker volume rm my-volume
-   ```
+5. **Удаление тома**: Чтобы удалить том, который больше не нужен, убедитесь, что его не используют ни один контейнер, затем выполните:
 
-## Understanding Bind Mounts
+```bash
+docker volume rm my-volume
+```
 
-**Bind mounts** allow you to mount a specific directory from your host filesystem into a container. This is useful for development environments where you want to work with files on your host machine.
+## Понимание Bind Mounts
 
-### Key Features of Bind Mounts:
-- **Host Dependency**: Bind mounts are dependent on the host filesystem. Changes made in the mounted directory are reflected in both the host and the container.
-- **Flexibility**: You can mount any directory from the host, making it easy to share files between the host and the container.
-- **Not Managed by Docker**: Unlike volumes, bind mounts are not managed by Docker, so you need to ensure that the host directory exists before mounting.
+**Bind Mounts** позволяют вам монтировать определенный каталог из вашей файловой системы хоста в контейнер. Это полезно для сред разработки, где вы хотите работать с файлами на вашей хост-машине.
 
-### Creating and Using Bind Mounts
+### Основные характеристики монтирований Bind:
+- **Зависимость от хоста**: монтирования Bind зависят от файловой системы хоста. Изменения, внесенные в смонтированный каталог, отражаются как на хосте, так и в контейнере.
+- **Гибкость**: вы можете смонтировать любой каталог с хоста, что упрощает обмен файлами между хостом и контейнером.
+- **Не управляется Docker**: в отличие от томов, монтирования привязки не управляются Docker, поэтому перед монтированием необходимо убедиться, что каталог хоста существует.
 
-1. **Run a Container with a Bind Mount**: To create a bind mount, specify the host directory and the container directory in the `-v` flag:
+### Создание и использование монтирований привязки
 
-   ```bash
-   docker run -d --name my-container -v /path/on/host:/data nginx
-   ```
+1. **Запуск контейнера с Bind Mounts**: чтобы создать монтирование привязки, укажите каталог хоста и каталог контейнера во флаге `-v`:
 
-   Replace `/path/on/host` with the actual path to the directory on your host that you want to mount.
+```bash
+docker run -d --name my-container -v /path/on/host:/data nginx
+```
 
-2. **Verify the Bind Mount**: You can check the contents of the mounted directory inside the container by running:
+Замените `/path/on/host` на фактический путь к каталогу на вашем хосте, который вы хотите смонтировать.
 
-   ```bash
-   docker exec -it my-container ls /data
-   ```
+2. **Проверка Bind Mounts**: Вы можете проверить содержимое смонтированного каталога внутри контейнера, выполнив:
 
-3. **Remove a Container with a Bind Mount**: When you remove the container, the bind mount will remain on the host filesystem, as it is not managed by Docker.
+```bash
+docker exec -it my-container ls /data
+```
 
-## Managing Data in Docker Containers Effectively
+3. **Удаление контейнера с Bind Mounts**: При удалении контейнера Bind Mounts останется в файловой системе хоста, так как Docker им не управляет.
 
-### Best Practices for Data Management
+## Эффективное управление данными в контейнерах Docker
 
-1. **Use Volumes for Persistent Data**: Whenever you need to store data that should persist beyond the lifecycle of a container, use Docker volumes.
+### Лучшие практики управления данными
 
-2. **Use Bind Mounts for Development**: For development purposes, bind mounts are useful as they allow you to edit files on your host and see changes reflected in the container immediately.
+1. **Использование томов для постоянных данных**: Всякий раз, когда вам нужно хранить данные, которые должны сохраняться после окончания жизненного цикла контейнера, используйте тома Docker.
 
-3. **Backup and Restore Volumes**: Regularly back up your volumes to prevent data loss. You can create a tarball of the volume data using the following command:
+2. **Использование Bind Mounts для разработки**: В целях разработки Bind Mounts полезны, поскольку они позволяют редактировать файлы на вашем хосте и немедленно видеть изменения, отраженные в контейнере.
 
-   ```bash
-   docker run --rm -v my-volume:/data -v $(pwd):/backup alpine tar czf /backup/my-volume-backup.tar.gz -C /data . 
-   ```
+3. **Резервное копирование и восстановление томов**: Регулярно создавайте резервные копии томов, чтобы предотвратить потерю данных. Вы можете создать tarball с данными тома, используя следующую команду:
 
-4. **Clean Up Unused Volumes**: Periodically check for and remove unused volumes to free up disk space. Use:
+```bash
+docker run --rm -v my-volume:/data -v $(pwd):/backup alpine tar czf /backup/my-volume-backup.tar.gz -C /data .
+```
 
-   ```bash
-   docker volume prune
-   ```
+4. **Очистка неиспользуемых томов**: периодически проверяйте и удаляйте неиспользуемые тома, чтобы освободить место на диске. Используйте:
 
-## Conclusion
+```bash
+docker volume prune
+```
 
-In this lesson, you learned about Docker volumes and bind mounts for data persistence, as well as how to manage data effectively in Docker containers. Understanding these concepts is essential for building robust and scalable applications with Docker. In the next lesson, we will explore Docker Compose, a tool that simplifies the management of multi-container applications.
+## Заключение
+
+В этом уроке вы узнали о томах Docker и привязках монтирования для сохранения данных, а также о том, как эффективно управлять данными в контейнерах Docker. Понимание этих концепций необходимо для создания надежных и масштабируемых приложений с помощью Docker. В следующем уроке мы рассмотрим Docker Compose — инструмент, который упрощает управление многоконтейнерными приложениями.
