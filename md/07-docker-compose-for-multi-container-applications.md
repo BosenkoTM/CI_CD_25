@@ -1,146 +1,148 @@
-# Lesson 7: Docker Compose for Multi-Container Applications
+# Урок 7: Docker Compose для многоконтейнерных приложений
 
-## Introduction to Docker Compose
+## Введение в Docker Compose
 
-**Docker Compose** is a powerful tool that simplifies the management of multi-container Docker applications. It allows you to define and run multiple containers as a single service using a simple YAML configuration file. With Docker Compose, you can easily orchestrate the deployment of applications that consist of multiple services, such as web servers, databases, and caching systems.
+**Docker Compose** — это мощный инструмент, упрощающий управление многоконтейнерными приложениями Docker. Он позволяет определять и запускать несколько контейнеров как одну службу с помощью простого файла конфигурации YAML. С Docker Compose вы можете легко организовать развертывание приложений, состоящих из нескольких служб, таких как веб-серверы, базы данных и системы кэширования.
 
-### Benefits of Using Docker Compose
+### Преимущества использования Docker Compose
 
-1. **Simplified Configuration**: Docker Compose uses a single `docker-compose.yml` file to define all the services, networks, and volumes required for your application. This makes it easier to manage complex setups.
+1. **Упрощенная конфигурация**: Docker Compose использует один файл `docker-compose.yml` для определения всех служб, сетей и томов, необходимых для вашего приложения. Это упрощает управление сложными настройками.
 
-2. **Multi-Container Management**: You can start, stop, and manage multiple containers with a single command, streamlining your workflow.
+2. **Управление несколькими контейнерами**: вы можете запускать, останавливать и управлять несколькими контейнерами с помощью одной команды, что упрощает ваш рабочий процесс.
 
-3. **Environment Consistency**: Docker Compose ensures that your application runs in the same environment across different systems, making it easier to develop, test, and deploy.
+3. **Согласованность среды**: Docker Compose гарантирует, что ваше приложение будет работать в одной и той же среде в разных системах, что упрощает разработку, тестирование и развертывание.
 
-4. **Service Dependencies**: Compose allows you to define dependencies between services, ensuring that they start in the correct order.
+4. **Зависимости служб**: Compose позволяет вам определять зависимости между службами, гарантируя, что они запускаются в правильном порядке.
 
-5. **Scaling Services**: You can easily scale services up or down by specifying the number of container instances in the `docker-compose.yml` file.
+5. **Масштабирование служб**: вы можете легко масштабировать службы вверх или вниз, указав количество экземпляров контейнеров в файле `docker-compose.yml`.
 
-## Creating a `docker-compose.yml` File
+## Создание файла `docker-compose.yml`
 
-To illustrate how to use Docker Compose, we will create a simple multi-container application that consists of a web server (using Flask) and a Redis database.
+Чтобы проиллюстрировать, как использовать Docker Compose, мы создадим простое многоконтейнерное приложение, состоящее из веб-сервера (использующего Flask) и базы данных Redis.
 
-### Step 1: Create the Project Directory
+### Шаг 1: Создайте каталог проекта
 
-1. Open your terminal and create a new directory for your project:
+1. Откройте терминал и создайте новый каталог для вашего проекта:
 
-   ```bash
-   mkdir my-flask-app
-   cd my-flask-app
-   ```
+```bash
+mkdir my-flask-app
+cd my-flask-app
+```
 
-### Step 2: Create the Flask Application
+### Шаг 2: Создайте приложение Flask
 
-2. Create a file named `app.py` with the following content:
+2. Создайте файл с именем `app.py` со следующим содержимым:
 
-   ```python
-   from flask import Flask
-   import redis
+```python
+from flask import Flask
+import redis
 
-   app = Flask(__name__)
-   redis_client = redis.StrictRedis(host='redis', port=6379, decode_responses=True)
+app = Flask(__name__)
+redis_client = redis.StrictRedis(host='redis', port=6379, decode_responses=True)
 
-   @app.route('/')
-   def index():
-       visits = redis_client.incr('counter')
-       return f'Hello, World! You are visitor number {visits}.'
+@app.route('/')
+def index():
+visits = redis_client.incr('counter')
+return f'Hello, World! You are visitor number {visits}.'
 
-   if __name__ == '__main__':
-       app.run(host='0.0.0.0')
-   ```
+if __name__ == '__main__':
+app.run(host='0.0.0.0')
+```
 
-### Step 3: Create the Requirements File
+### Шаг 3: Создайте `requirements.txt`
 
-3. Create a file named `requirements.txt` with the following content:
+3. Создайте файл с именем `requirements.txt` со следующим содержимым:
 
-   ```
-   Flask
-   redis
-   ```
+```
+Flask
+redis
+```
 
-### Step 4: Create the `docker-compose.yml` File
+### Шаг 4: Создайте файл `docker-compose.yml`
 
-4. In the same directory, create a file named `docker-compose.yml` and add the following content:
+4. В том же каталоге создайте файл с именем `docker-compose.yml` и добавьте следующее содержимое:
 
-   ```yaml
-   version: '3.8'
+```yaml
+version: '3.8'
 
-   services:
-     web:
-       build: .
-       ports:
-         - "5000:5000"
-       depends_on:
-         - redis
+services:
+web:
+build: .
+ports:
+- "5000:5000"
+dependent_on:
+- redis
 
-     redis:
-       image: "redis:alpine"
-   ```
+redis:
+image: "redis:alpine"
+```
 
-### Explanation of the `docker-compose.yml` File
+### Объяснение файла `docker-compose.yml`
 
-- **version**: Specifies the version of the Docker Compose file format.
-- **services**: Defines the different services that make up your application.
-  - **web**: The Flask web application service.
-    - **build**: Specifies that Docker should build the image from the Dockerfile in the current directory.
-    - **ports**: Maps port 5000 on the host to port 5000 in the container.
-    - **depends_on**: Indicates that the `web` service depends on the `redis` service, ensuring that Redis starts before the web application.
-  - **redis**: The Redis service, using the official Redis image from Docker Hub.
+- **version**: указывает версию формата файла Docker Compose.
+- **services**: определяет различные службы, из которых состоит ваше приложение.
+- **web**: служба веб-приложения Flask.
+- **build**: указывает, что Docker должен построить образ из Dockerfile в текущем каталоге.
+- **ports**: сопоставляет порт 5000 на хосте с портом 5000 в контейнере.
+- **depends_on**: указывает, что служба `web` зависит от службы `redis`, гарантируя, что Redis запустится до веб-приложения.
+- **redis**: служба Redis, использующая официальный образ Redis из Docker Hub.
 
-### Step 5: Create a Dockerfile
+### Шаг 5: Создайте Dockerfile
 
-5. Create a file named `Dockerfile` in the same directory with the following content:
+5. Создайте файл с именем `Dockerfile` в том же каталоге со следующим содержимым:
 
-   ```dockerfile
-   # Use the official Python image from the Docker Hub
-   FROM python:3.9-slim
+```dockerfile
+# Используйте официальный образ Python из Docker Hub
+FROM python:3.9-slim
 
-   # Set the working directory in the container
-   WORKDIR /app
+# Установите рабочий каталог в контейнере
+WORKDIR /app
 
-   # Copy the requirements file and install dependencies
-   COPY requirements.txt requirements.txt
-   RUN pip install --no-cache-dir -r requirements.txt
+# Скопируйте файл требований и установите зависимости
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-   # Copy the application code into the container
-   COPY app.py app.py
+# Скопируйте код приложения в контейнер
+COPY app.py app.py
 
-   # Command to run the application
-   CMD ["python", "app.py"]
-   ```
+# Команда для запуска приложения
+CMD ["python", "app.py"]
+```
 
-## Running the Multi-Container Setup
+## Запуск настройки нескольких контейнеров
 
-### Step 1: Build and Start the Services
+### Шаг 1: Сборка и запуск служб
 
-1. In your terminal, run the following command to build the images and start the services defined in the `docker-compose.yml` file:
+1. В терминале выполните следующую команду для сборки образов и запуска служб, определенных в файле `docker-compose.yml`:
 
-   ```bash
-   docker-compose up
-   ```
+```bash
+docker compose up
+```
 
-   This command will build the web service image and start both the web and Redis services. You should see logs indicating that the services are running.
+Эта команда создаст образ веб-службы и запустит как веб-службу, так и службу Redis. Вы должны увидеть журналы, указывающие на то, что службы запущены.
 
-### Step 2: Access the Application
+### Шаг 2: Доступ к приложению
 
-2. Open your web browser and navigate to `http://localhost:5000`. You should see the message indicating the number of visitors:
+2. Откройте веб-браузер и перейдите по адресу `http://localhost:5000`. Вы должны увидеть сообщение с указанием количества посетителей:
 
-   ```
-   Hello, World! You are visitor number 1.
-   ```
+```
+Hello, World! Вы посетитель номер 1.
+```
 
-   Refresh the page to see the visitor count increase.
+Обновите страницу, чтобы увидеть увеличение количества посетителей.
 
-### Step 3: Stopping the Services
+### Шаг 3: Остановка служб
 
-3. To stop the services, you can press `Ctrl + C` in the terminal where Docker Compose is running. Alternatively, you can run:
+3. Чтобы остановить службы, вы можете нажать `Ctrl + C` в терминале, где запущен Docker Compose. Или вы можете запустить:
 
-   ```bash
-   docker-compose down
-   ```
+```bash
+docker compose down
+```
 
-   This command stops and removes the containers defined in the `docker-compose.yml` file.
+Эта команда останавливает и удаляет контейнеры, определенные в файле `docker-compose.yml`.
 
-## Conclusion
+## Заключение
 
-In this lesson, you learned about Docker Compose and its benefits for managing multi-container applications. You created a `docker-compose.yml` file to define a simple Flask application and Redis database, and you ran the multi-container setup with a single command. In the next lesson, we will explore advanced Docker Compose features, including environment variables and scaling services.
+В этом уроке вы узнали о Docker Compose и его преимуществах для управления многоконтейнерными приложениями. Вы создали файл `docker-compose.yml` для определения простого приложения Flask и базы данных Redis, а также запустили многоконтейнерную настройку с помощью одной команды. В следующем уроке мы рассмотрим расширенные функции Docker Compose, включая переменные среды и службы масштабирования.
+
+
