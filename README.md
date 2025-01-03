@@ -1,105 +1,105 @@
-# Mastering Containerization with Docker and Kubernetes
+# Интеграция и развертывание программного обеспечения с помощью контейнеров(Docker и Kubernetes)
 
-Welcome to the **Mastering Containerization with Docker and Kubernetes** course! This course is designed for beginners with some programming experience who want to deepen their understanding of containerization technologies. By the end of this course, you will have the skills to build, deploy, and manage applications using Docker and Kubernetes.
+Цель дисциплины "Интеграция и развертывание программного обеспечения с помощью контейнеров" — формирование у студентов теоретических знаний и практических навыков в области контейнеризации, управления контейнерами, оркестрации, а также использования технологий контейнеров как услуги (CaaS) и неизменяемой инфраструктуры. Студенты познакомятся с основными инструментами и технологиями, такими как Docker, Kubernetes, Packer, и научатся применять их для интеграции и развертывания программного обеспечения.
 
-## Course Outline
+## План курса
 
-1. **Introduction to Containerization**
-   - Understand what containerization is and its benefits over traditional virtualization.
-   - Explore real-world use cases and scenarios where containerization shines.
+1. **Введение в контейнеризацию**
+- Ознакомитесь с понятием контейнеризации и ее преимущества по сравнению с традиционной виртуализацией.
+- Изучите реальные примеры использования и сценарии, в которых контейнеризация применяется.
 
-2. **Getting Started with Docker**
-   - Install Docker on your local machine and verify the installation.
-   - Familiarize yourself with the Docker CLI and basic commands.
+2. **Начало работы с Docker**
+- Установите Docker на локальную машину и проверите компоненты.
+- Ознакомитесь с Docker CLI и основными командами.
 
-3. **Understanding Docker Images and Containers**
-   - Learn the difference between images and containers.
-   - Explore how to create, manage, and delete Docker containers.
+3. **Образ Docker и контейнеры**
+- Узнайте разницу между образами и контейнерами.
+- Изучите, как создавать, управлять и удалять контейнеры Docker.
 
-4. **Building Your First Docker Image**
-   - Write a simple Dockerfile to create a custom image.
-   - Build and run your Docker image locally.
+4. **Создание первого образа Docker**
+- Напишите простой Dockerfile для создания пользовательского образа.
+- Создадите и запустите образ Docker локально.
 
-5. **Docker Networking Basics**
-   - Understand the networking model in Docker and how containers communicate.
-   - Explore the different types of Docker networks and their use cases.
+5. **Основы сетей Docker**
+- Поймите сетевую модель в Docker и как взаимодействуют контейнеры.
+- Изучите различные типы сетей Docker и их варианты использования.
 
-6. **Data Management in Docker**
-   - Learn about volumes and bind mounts for data persistence.
-   - Understand how to manage data in Docker containers effectively.
+6. **Управление данными в Docker**
+- Узнайте о томах и привязке монтирований для сохранения данных.
+- Узнайте, как эффективно управлять данными в контейнерах Docker.
 
-7. **Docker Compose for Multi-Container Applications**
-   - Introduction to Docker Compose and its benefits for managing multi-container applications.
-   - Create a `docker-compose.yml` file and run a multi-container setup.
+7. **Docker Compose для многоконтейнерных приложений**
+- Введение в Docker Compose и его преимущества для управления многоконтейнерными приложениями.
+- Создайте файл `docker-compose.yml` и запустите многоконтейнерную настройку.
 
-8. **Introduction to Kubernetes**
-   - Understand what Kubernetes is and its architecture (nodes, pods, services).
-   - Explore the advantages of using Kubernetes for container orchestration.
+8. **Введение в Kubernetes**
+- Поймите, что такое Kubernetes и его архитектура (узлы, модули, службы).
+- Изучите преимущества использования Kubernetes для оркестровки контейнеров.
 
-9. **Setting Up a Local Kubernetes Environment**
-   - Install Minikube or Docker Desktop to create a local Kubernetes cluster.
-   - Verify the Kubernetes installation and explore basic commands.
+9. **Настройка локальной среды Kubernetes**
+- Установите Minikube или Docker Desktop для создания локального кластера Kubernetes.
+- Проверьте установку Kubernetes и изучите основные команды.
 
-10. **Deploying Your First Application on Kubernetes**
-    - Create a simple deployment and expose it as a service.
-    - Understand the concepts of pods, deployments, and services.
+10. **Развертывание вашего первого приложения в Kubernetes**
+- Создайте простое развертывание и представьте его как службу.
+- Поймите концепции модулей, развертываний и служб.
 
-11. **Scaling Applications in Kubernetes**
-    - Learn how to scale your applications up and down using Kubernetes.
-    - Explore the concept of replicas and how they ensure availability.
+11. **Масштабирование приложений в Kubernetes**
+- Узнайте, как масштабировать ваши приложения вверх и вниз с помощью Kubernetes.
+- Изучите концепцию реплик и то, как они обеспечивают доступность.
 
-12. **Managing Configuration and Secrets in Kubernetes**
-    - Understand ConfigMaps and Secrets for managing application configurations.
-    - Learn how to use them in your deployments.
+12. **Управление конфигурацией и секретами в Kubernetes**
+- Поймите ConfigMap и секреты для управления конфигурациями приложений.
+- Узнайте, как использовать их в ваших развертываниях.
 
-13. **Monitoring and Logging in Kubernetes**
-    - Explore tools and techniques for monitoring Kubernetes applications.
-    - Understand logging best practices and how to access logs.
+13. **Мониторинг и ведение журнала в Kubernetes**
+- Изучите инструменты и методы для мониторинга приложений Kubernetes.
+- Поймите лучшие практики ведения журнала и как получить доступ к журналам.
 
-14. **Networking in Kubernetes**
-    - Learn about Kubernetes networking model and service types (ClusterIP, NodePort, LoadBalancer).
-    - Explore Ingress controllers for managing external access.
+14. **Сетевые технологии в Kubernetes**
+- Узнайте о сетевой модели Kubernetes и типах служб (ClusterIP, NodePort, LoadBalancer).
 
-15. **Persistent Storage in Kubernetes**
-    - Understand persistent volumes (PV) and persistent volume claims (PVC).
-    - Learn how to manage data persistence in Kubernetes applications.
+- Изучите контроллеры Ingress для управления внешним доступом.
 
-16. **Kubernetes Security Best Practices**
-    - Explore security concepts in Kubernetes, including RBAC and Network Policies.
-    - Understand how to secure your applications and cluster.
+15. **Постоянное хранилище в Kubernetes**
+- Изучите постоянные тома (PV) и требования постоянных томов (PVC).
+- Узнайте, как управлять сохранением данных в приложениях Kubernetes.
 
-17. **CI/CD with Docker and Kubernetes**
-    - Learn how to integrate Docker and Kubernetes into Continuous Integration/Continuous Deployment pipelines.
-    - Explore popular CI/CD tools that work well with containerized applications.
+16. **Лучшие практики безопасности Kubernetes**
+- Изучите концепции безопасности в Kubernetes, включая RBAC и сетевые политики.
+- Узнайте, как защитить свои приложения и кластер.
 
-18. **Advanced Kubernetes Concepts**
-    - Introduction to Helm for package management in Kubernetes.
-    - Explore custom resource definitions (CRDs) and operators.
+17. **CI/CD с Docker и Kubernetes**
+- Узнайте, как интегрировать Docker и Kubernetes в конвейеры непрерывной интеграции/непрерывного развертывания.
+- Изучите популярные инструменты CI/CD, которые хорошо работают с контейнерными приложениями.
 
-19. **Service Meshes and Microservices Architecture**
-    - Understand the concept of service meshes and their role in microservices.
-    - Explore tools like Istio and Linkerd for managing service-to-service communication.
+18. **Расширенные концепции Kubernetes**
+- Введение в Helm для управления пакетами в Kubernetes.
+- Изучите пользовательские определения ресурсов (CRD) и операторов.
 
-20. **Kubernetes Federation and Multi-Cluster Management**
-    - Learn about Kubernetes federation for managing multiple clusters.
-    - Explore strategies for multi-cluster deployments and management.
+19. **Сервисные сетки и архитектура микросервисов**
+- Понимание концепции сервисных сеток и их роли в микросервисах.
+- Изучение таких инструментов, как Istio и Linkerd для управления коммуникацией между сервисами.
 
-21. **Troubleshooting Docker and Kubernetes**
-    - Learn common troubleshooting techniques for Docker and Kubernetes.
-    - Explore tools and commands to diagnose issues effectively.
+20. **Федерация Kubernetes и управление несколькими кластерами**
+- Узнайте о федерации Kubernetes для управления несколькими кластерами.
+- Изучите стратегии развертывания и управления несколькими кластерами.
 
-22. **Performance Tuning and Optimization**
-    - Understand best practices for optimizing Docker images and Kubernetes deployments.
-    - Learn about resource requests and limits for efficient resource management.
+21. **Устранение неполадок Docker и Kubernetes**
+- Изучите общие методы устранения неполадок для Docker и Kubernetes.
+- Изучите инструменты и команды для эффективной диагностики проблем.
 
-23. **Cloud-Native Application Design Principles**
-    - Explore the principles of cloud-native application design and architecture.
-    - Understand how to leverage containerization for building scalable applications.
+22. **Настройка и оптимизация производительности**
+- Изучите передовые методы оптимизации образов Docker и развертываний Kubernetes.
+- Узнайте о запросах ресурсов и ограничениях для эффективного управления ресурсами.
 
-24. **Final Project: Building and Deploying a Full-Stack Application**
-    - Combine your knowledge to build a full-stack application using Docker and Kubernetes.
-    - Deploy the application to a cloud provider or a local Kubernetes cluster.
+23. **Принципы проектирования облачных приложений**
+- Изучите принципы проектирования и архитектуры облачных приложений.
+- Узнайте, как использовать контейнеризацию для создания масштабируемых приложений.
 
+24. **Финальный проект: Создание и развертывание полнофункционального приложения**
+- Объедините свои знания для создания полнофункционального приложения с использованием Docker и Kubernetes.
+- Разверните приложение в облачном провайдере или локальном кластере Kubernetes.
 ## Instructions for Cloning the Repository
 
 To get started with the course, you can clone this repository to your local machine. Follow these steps:
