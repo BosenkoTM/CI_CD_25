@@ -1,119 +1,119 @@
-# Lesson 3: Understanding Docker Images and Containers
+# Урок 3: Понимание образов и контейнеров Docker
 
-## What are Docker Images?
+## Что такое образы Docker?
 
-A **Docker image** is a lightweight, standalone, and executable package that includes everything needed to run a piece of software, including the code, runtime, libraries, environment variables, and configuration files. Images are read-only templates used to create containers.
+**Образ Docker** — это легкий, автономный и исполняемый пакет, который включает в себя все необходимое для запуска программного обеспечения, включая код, среду выполнения, библиотеки, переменные среды и файлы конфигурации. Образы — это шаблоны, доступные только для чтения, используемые для создания контейнеров.
 
-### Key Characteristics of Docker Images:
-- **Immutable**: Once created, images cannot be changed. Any modifications require creating a new image.
-- **Layered**: Images are built in layers, allowing for efficient storage and sharing. Each layer represents a change or addition to the image.
-- **Portable**: Images can be shared and run on any system that has Docker installed, ensuring consistency across environments.
+### Основные характеристики образов Docker:
+- **Неизменяемость**: После создания образы нельзя изменить. Любые изменения требуют создания нового образа.
+- **Многослойность**: Образы создаются слоями, что обеспечивает эффективное хранение и совместное использование. Каждый слой представляет собой изменение или дополнение к образу.
+- **Переносимость**: Образы можно совместно использовать и запускать в любой системе, в которой установлен Docker, что обеспечивает согласованность в разных средах.
 
-## What are Docker Containers?
+## Что такое контейнеры Docker?
 
-A **Docker container** is a runnable instance of a Docker image. Containers are created from images and can be started, stopped, moved, and deleted. Unlike images, containers are mutable and can change during runtime.
+**Контейнер Docker** — это запускаемый экземпляр образа Docker. Контейнеры создаются из образов и могут быть запущены, остановлены, перемещены и удалены. В отличие от образов, контейнеры изменяемы и могут изменяться во время выполнения.
 
-### Key Characteristics of Docker Containers:
-- **Isolated**: Each container runs in its own environment, isolated from other containers and the host system.
-- **Ephemeral**: Containers can be created and destroyed quickly. They can also be stopped and started without losing their state if configured to use persistent storage.
-- **Lightweight**: Containers share the host OS kernel, making them more efficient than traditional virtual machines.
+### Ключевые характеристики контейнеров Docker:
+- **Изолированные**: каждый контейнер работает в своей собственной среде, изолированной от других контейнеров и хост-системы.
+- **Эфемерные**: контейнеры можно быстро создавать и уничтожать. Их также можно останавливать и запускать без потери состояния, если они настроены на использование постоянного хранилища.
+- **Легкие**: контейнеры используют ядро ​​ОС хоста, что делает их более эффективными, чем традиционные виртуальные машины.
 
-## Difference Between Docker Images and Containers
+## Разница между образами Docker и контейнерами
 
-| Feature         | Docker Image                        | Docker Container                   |
-|-----------------|------------------------------------|------------------------------------|
-| Definition      | A read-only template for creating containers | A running instance of an image     |
-| State           | Immutable                          | Mutable                            |
-| Purpose         | Used to create containers          | Executes applications               |
-| Storage         | Stored as layers                   | Uses the image to run processes    |
-| Lifecycle       | Built and versioned                | Created, started, stopped, deleted |
+| Функция | Образ Docker | Контейнер Docker |
+|---------------------------------|----|------------------------------------|
+| Определение | Шаблон только для чтения для создания контейнеров | Запущенный экземпляр образа |
+| Состояние | Неизменяемый | Изменяемый |
+| Назначение | Используется для создания контейнеров | Выполняет приложения |
+| Хранилище | Хранится в виде слоев | Использует образ для запуска процессов |
+| Жизненный цикл | Сборка и управление версиями | Создано, запущено, остановлено, удалено |
 
-## Creating Docker Containers
+## Создание контейнеров Docker
 
-To create a Docker container, you need to use the `docker run` command followed by the image name. Here’s how to do it:
+Чтобы создать контейнер Docker, вам нужно использовать команду `docker run`, за которой следует имя образа. Вот как это сделать:
 
-### Step 1: Pull an Image
+### Шаг 1: Извлечение образа
 
-Before creating a container, ensure you have the desired image. For example, to pull the latest Ubuntu image, run:
+Перед созданием контейнера убедитесь, что у вас есть нужный образ. Например, чтобы извлечь последний образ Ubuntu, выполните:
 
 ```bash
 docker pull ubuntu
 ```
 
-### Step 2: Create and Run a Container
+### Шаг 2: Создание и запуск контейнера
 
-To create and run a container from the Ubuntu image, use the following command:
+Чтобы создать и запустить контейнер из образа Ubuntu, используйте следующую команду:
 
 ```bash
 docker run -it ubuntu
 ```
 
-- The `-it` flags allow you to run the container in interactive mode with a terminal.
+- Флаги `-it` позволяют запускать контейнер в интерактивном режиме с помощью терминала.
 
-### Step 3: Access the Container
+### Шаг 3: Доступ к контейнеру
 
-Once the container is running, you will be inside the Ubuntu shell. You can run commands as if you were using a regular terminal.
+После запуска контейнера вы окажетесь внутри оболочки Ubuntu. Вы можете запускать команды так же, как если бы использовали обычный терминал.
 
-## Managing Docker Containers
+## Управление контейнерами Docker
 
-### 1. **Listing Containers**
+### 1. **Список контейнеров**
 
-To see all running containers, use:
+Чтобы увидеть все запущенные контейнеры, используйте:
 
 ```bash
 docker ps
 ```
 
-To list all containers, including stopped ones, use:
+Чтобы вывести список всех контейнеров, включая остановленные, используйте:
 
 ```bash
 docker ps -a
 ```
 
-### 2. **Stopping a Container**
+### 2. **Остановка контейнера**
 
-To stop a running container, use the following command, replacing `<container-id>` with the actual ID or name of the container:
+Чтобы остановить запущенный контейнер, используйте следующую команду, заменив `<container-id>` на фактический идентификатор или имя контейнера:
 
 ```bash
 docker stop <container-id>
 ```
 
-### 3. **Starting a Stopped Container**
+### 3. **Запуск остановленного контейнера**
 
-To start a stopped container, use:
+Чтобы запустить остановленный контейнер, используйте:
 
 ```bash
 docker start <container-id>
 ```
 
-### 4. **Removing a Container**
+### 4. **Удаление контейнера**
 
-To remove a container, first ensure it is stopped. Then, use:
+Чтобы удалить контейнер, сначала убедитесь, что он остановлен. Затем используйте:
 
 ```bash
 docker rm <container-id>
 ```
 
-### 5. **Removing All Stopped Containers**
+### 5. **Удаление всех остановленных контейнеров**
 
-To remove all stopped containers at once, run:
+Чтобы удалить все остановленные контейнеры одновременно, выполните:
 
 ```bash
 docker container prune
 ```
 
-You will be prompted to confirm the action.
+Вам будет предложено подтвердить действие.
 
-## Creating a Container with Custom Commands
+## Создание контейнера с помощью пользовательских команд
 
-You can also create and run a container while executing a specific command. For example, to run a simple command in an Ubuntu container, use:
+Вы также можете создать и запустить контейнер во время выполнения определенной команды. Например, чтобы запустить простую команду в контейнере Ubuntu, используйте:
 
 ```bash
 docker run ubuntu echo "Hello, Docker!"
 ```
 
-This command will create a new container, execute the `echo` command, and then exit.
+Эта команда создаст новый контейнер, выполнит команду `echo`, а затем выйдет.
 
-## Conclusion
+## Заключение
 
-In this lesson, you learned the difference between Docker images and containers, as well as how to create, manage, and delete Docker containers. Understanding these concepts is crucial for effectively using Docker in your development workflow. In the next lesson, we will explore how to build your first Docker image using a Dockerfile.
+В этом уроке вы узнали разницу между образами Docker и контейнерами, а также о том, как создавать, управлять и удалять контейнеры Docker. Понимание этих концепций имеет решающее значение для эффективного использования Docker в вашем рабочем процессе разработки. На следующем уроке мы рассмотрим, как создать свой первый образ Docker с помощью Dockerfile.
