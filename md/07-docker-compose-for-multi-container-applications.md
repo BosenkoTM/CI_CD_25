@@ -146,3 +146,212 @@ docker compose down
 В этом уроке вы узнали о Docker Compose и его преимуществах для управления многоконтейнерными приложениями. Вы создали файл `docker-compose.yml` для определения простого приложения Flask и базы данных Redis, а также запустили многоконтейнерную настройку с помощью одной команды. В следующем уроке мы рассмотрим расширенные функции Docker Compose, включая переменные среды и службы масштабирования.
 
 
+## Лабораторная работа 3. Docker Compose для многоконтейнерных приложений
+
+### Цель работы: освоить использование Docker Compose для управления многоконтейнерными приложениями.
+
+### Задачи:
+1. Создать файл `docker-compose.yml` для указанного многоконтейнерного приложения.
+2. Запустить приложение с помощью `Docker Compose`.
+3. Проверить работоспособность приложения и взаимодействие между контейнерами.
+4. Выполнить индивидуальное задание.
+
+### Критерии оценки:
+- Правильность создания файла docker-compose.yml (4 балла).
+- Корректность запуска приложения с помощью Docker Compose (3 балла).
+- Работоспособность приложения и взаимодействие между контейнерами (2 балла).
+- Выполнение индивидуального задания (1 балл).
+
+### Ход работы (пример для Варианта 25):
+
+1. Создание файла `docker-compose.yml` для приложения чата на `Node.js` и `Socket.IO`.
+- Создайте новый каталог для проекта и перейдите в него:
+  ```
+  mkdir nodejs-chat-app
+  cd nodejs-chat-app
+  ```
+- Создайте файл `app.js` со следующим содержимым:
+  ```javascript
+  const express = require('express');
+  const http = require('http');
+  const socketIO = require('socket.io');
+
+  const app = express();
+  const server = http.createServer(app);
+  const io = socketIO(server);
+
+  app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+  });
+
+  io.on('connection', (socket) => {
+    console.log('Новый пользователь подключился');
+
+    socket.on('chat message', (msg) => {
+      io.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Пользователь отключился');
+    });
+  });
+
+  server.listen(3000, () => {
+    console.log('Сервер запущен на порту 3000');
+  });
+  ```
+- Создайте файл `index.html` со следующим содержимым:
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Чат на Socket.IO</title>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="chat-form">
+      <input id="chat-input" autocomplete="off" /><button>Отправить</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const messages = document.getElementById('messages');
+
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (chatInput.value) {
+          socket.emit('chat message', chatInput.value);
+          chatInput.value = '';
+        }
+      });
+
+      socket.on('chat message', (msg) => {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        messages.appendChild(li);
+      });
+    </script>
+  </body>
+  </html>
+  ```
+- Создайте файл `package.json` со следующим содержимым:
+  ```json
+  {
+    "name": "nodejs-chat-app",
+    "version": "1.0.0",
+    "description": "Простой чат на Node.js и Socket.IO",
+    "main": "app.js",
+    "dependencies": {
+      "express": "^4.17.1",
+      "socket.io": "^4.1.2"
+    }
+  }
+  ```
+- Создайте файл `Dockerfile` со следующим содержимым:
+  ```
+  FROM node:14
+
+  WORKDIR /app
+
+  COPY package.json .
+  RUN npm install
+
+  COPY . .
+
+  EXPOSE 3000
+
+  CMD ["node", "app.js"]
+  ```
+- Создайте файл `docker-compose.yml` со следующим содержимым:
+  ```yaml
+  version: '3'
+  services:
+    web:
+      build: .
+      ports:
+        - "3000:3000"
+  ```
+
+2. Запуск приложения с помощью `Docker Compose`.
+- Находясь в каталоге проекта, выполните команду для запуска приложения:
+  ```
+  docker compose up
+  ```
+
+3. Проверка работоспособности приложения.
+- Откройте веб-браузер и перейдите по адресу `http://localhost:3000`. Вы должны увидеть простой интерфейс чата.
+- Откройте несколько вкладок браузера с тем же URL и отправьте сообщения из разных вкладок. Сообщения должны отображаться в режиме реального времени во всех вкладках.
+
+4. Остановка приложения.
+- Нажмите `Ctrl+C` в терминале, где запущено приложение, чтобы остановить контейнеры.
+
+### Индивидуальные задания.
+
+**Вариант 1.** Создайте `docker-compose.yml` для приложения на `Flask`, использующего базу данных `PostgreSQL` и `Redis` для кэширования.
+
+**Вариант 2.** Создайте `docker-compose.yml` для приложения на `Django`, использующего базу данных `MySQL` и `Celery` для выполнения фоновых задач.
+
+**Вариант 3.** Создайте `docker-compose.yml` для приложения на `Express.js`, использующего базу данных `MongoDB` и `Nginx` в качестве обратного прокси.
+
+**Вариант 4.** Создайте `docker-compose.yml` для приложения на `Laravel`, использующего базу данных `PostgreSQL` и `Redis` для очереди задач.
+
+**Вариант 5.** Создайте `docker-compose.yml` для приложения на `Ruby on Rails`, использующего базу данных `MySQL` и `Sidekiq` для обработки фоновых задач.
+
+**Вариант 6.** Создайте `docker-compose.yml` для приложения на `Spring Boot`, использующего базу данных `PostgreSQL` и `RabbitMQ` для обмена сообщениями.
+
+**Вариант 7.** Создайте `docker-compose.yml` для приложения на `ASP.NET Core`, использующего базу данных `SQL Server` и `Redis` для кэширования.
+
+**Вариант 8.** Создайте `docker-compose.yml` для приложения на `Golang`, использующего базу данных `PostgreSQL` и `Kafka` для потоковой передачи данных.
+
+**Вариант 9.** Создайте `docker-compose.yml` для приложения на `PHP`, использующего базу данных `MySQL`, `Apache` в качестве веб-сервера и `phpMyAdmin` для администрирования базы данных.
+
+**Вариант 10.** Создайте `docker-compose.yml` для приложения на `Node.js`, использующего базу данных `MongoDB`, `Nginx` в качестве обратного прокси и MongoDB Express для администрирования базы данных.
+
+**Вариант 11.** Создайте `docker-compose.yml` для приложения на `Flask`, использующего базу данных `SQLite` и `Gunicorn` в качестве сервера приложений.
+
+**Вариант 12.** Создайте `docker-compose.yml` для приложения на `Django`, использующего базу данных `PostgreSQL` и `Nginx` для обслуживания статических файлов.
+
+**Вариант 13.** Создайте `docker-compose.yml` для приложения на `Express.js`, использующего базу данных `MySQL` и `Redis` для сеансов.
+
+**Вариант 14.** Создайте `docker-compose.yml` для приложения на Laravel, использующего базу данных MongoDB и Laravel Horizon для мониторинга очереди задач.
+
+**Вариант 15.** Создайте `docker-compose.yml` для приложения на `Ruby on Rails`, использующего базу данных `PostgreSQL` и `Nginx` для обслуживания статических файлов.
+
+**Вариант 16.** Создайте `docker-compose.yml` для приложения на `Spring Boot`, использующего базу данных `MySQL` и `Elasticsearch` для полнотекстового поиска.
+
+**Вариант 17.** Создайте `docker-compose.yml` для приложения на `ASP.NET Core`, использующего базу данных `PostgreSQL` и `Seq` для ведения журналов.
+
+**Вариант 18.** Создайте `docker-compose.yml` для приложения на `Golang`, использующего базу данных MongoDB и `Prometheus` для мониторинга.
+
+**Вариант 19.** Создайте `docker-compose.yml` для приложения на `PHP`, использующего базу данных `PostgreSQL`, `Nginx` в качестве веб-сервера и `Adminer` для администрирования базы данных.
+
+**Вариант 20.** Создайте `docker-compose.yml` для приложения на `Node.js`, использующего базу данных `Redis` и `Grafana` для визуализации данных.
+
+**Вариант 21.** Создайте `docker-compose.yml` для приложения на `Flask`, использующего базу данных `MySQ`L и `Celery` для выполнения периодических задач.
+
+**Вариант 22.** Создайте `docker-compose.yml` для приложения на `Django`, использующего базу данных `SQLite` и `Django Debug Toolbar` для отладки.
+
+**Вариант 23.** Создайте `docker-compose.yml` для приложения на `Express.js`, использующего базу данных `PostgreSQL` и `pgAdmin` для администрирования базы данных.
+
+**Вариант 24.** Создайте `docker-compose.yml` для приложения на `Laravel`, использующего базу данных `MySQL` и `Laravel Echo Server` для обработки событий в реальном времени.
+
+**Вариант 25.** Создайте `docker-compose.yml` для приложения на `Ruby on Rails`, использующего базу данных MongoDB и `Sidekiq Web` для мониторинга фоновых задач.
+
+### Форма отчета:
+1. Титульный лист.
+2. Цель работы.
+3. Ход выполнения работы (с указанием используемых команд и их результатов).
+4. Листинг созданного файла `docker-compose.yml`.
+5. Выводы по работе.
+6. Ответы на контрольные вопросы.
+
+### Контрольные вопросы:
+1. Что такое `Docker Compose` и для чего он используется?
+2. Какие основные преимущества использования `Docker Compose` для управления многоконтейнерными приложениями?
+3. Какие основные разделы и директивы используются в файле `docker-compose.yml`?
+4. Как запустить многоконтейнерное приложение с помощью `Docker Compose`?
+5. Как остановить и удалить контейнеры, запущенные с помощью `Docker Compose`?
