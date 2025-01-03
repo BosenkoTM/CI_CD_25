@@ -4,7 +4,7 @@
 
 <details>
   
-<summary style="font-weight: bold; color: red;">План курса</summary>
+<summary style="font-weight: bold; color: red;"> **План курса** </summary>
 
   ## План курса
 
