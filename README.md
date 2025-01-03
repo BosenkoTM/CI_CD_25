@@ -109,10 +109,10 @@
 
 3. **Клонируйте репозиторий**: Выполните следующую команду, чтобы клонировать репозиторий:
 ```bash
-git clone https://github.com/BosenkoTM/CI-CD_25
+git clone https://github.com/BosenkoTM/CI_CD_25
 ```
 
 4. **Перейдите в каталог курса**: Перейдите в каталог курса:
 ```bash
-cd CI-CD_25
+cd CI_CD_25
 ```
