@@ -1,107 +1,107 @@
-# Lesson 10: Deploying Your First Application on Kubernetes
+# Урок 10: Развертывание приложения в Kubernetes
 
-## Introduction to Deployments and Services
+## Введение в развертывания и сервисы
 
-In this lesson, you will learn how to deploy a simple application on Kubernetes using a **Deployment** and expose it as a **Service**. We will use a basic Nginx web server as our application. By the end of this lesson, you will understand the concepts of Pods, Deployments, and Services in Kubernetes.
+В этом уроке вы узнаете, как развернуть простое приложение в Kubernetes с помощью **Развертывания** и запустить его как **Сервис**. В качестве приложения мы будем использовать базовый веб-сервер Nginx. К концу этого урока вы поймете концепции Pod, Deployments и Services в Kubernetes.
 
-## What are Pods, Deployments, and Services?
+## Что такое Pod, Deployments и Services?
 
-- **Pod**: The smallest deployable unit in Kubernetes. A Pod can contain one or more containers that share the same network namespace and storage. Pods are ephemeral and can be created, destroyed, or replicated based on the desired state defined by the user.
+- **Pod**: наименьшая развертываемая единица в Kubernetes. Pod может содержать один или несколько контейнеров, которые совместно используют одно и то же сетевое пространство имен и хранилище. Pod являются эфемерными и могут быть созданы, уничтожены или реплицированы на основе желаемого состояния, определенного пользователем.
 
-- **Deployment**: A higher-level abstraction that manages a set of identical Pods. It ensures that the desired number of Pods are running and can handle updates to the application seamlessly.
+- **Deployment**: абстракция более высокого уровня, которая управляет набором идентичных Pod. Он обеспечивает запуск нужного количества Pod и может беспрепятственно обрабатывать обновления приложения.
 
-- **Service**: An abstraction that defines a logical set of Pods and a policy for accessing them. Services enable communication between different parts of your application and provide stable endpoints for accessing Pods.
+- **Сервис**: абстракция, которая определяет логический набор Pod и политику доступа к ним. Сервисы обеспечивают связь между различными частями вашего приложения и предоставляют стабильные конечные точки для доступа к Pod.
 
-## Step 1: Create a Simple Deployment
+## Шаг 1: Создание простого развертывания
 
-1. **Open Your Terminal**: Ensure you are connected to your Kubernetes cluster.
+1. **Откройте свой терминал**: Убедитесь, что вы подключены к кластеру Kubernetes.
 
-2. **Create a Deployment**: Use the following command to create a Deployment that runs an Nginx web server:
+2. **Создайте развертывание**: Используйте следующую команду для создания развертывания, которое запускает веб-сервер Nginx:
 
-   ```bash
-   kubectl create deployment nginx-deployment --image=nginx
-   ```
+```bash
+kubectl create deployment nginx-deployment --image=nginx
+```
 
-   This command creates a Deployment named `nginx-deployment` using the official Nginx image.
+Эта команда создает развертывание с именем `nginx-deployment`, используя официальный образ Nginx.
 
-3. **Verify the Deployment**: To check the status of the Deployment and see the Pods created by it, run:
+3. **Проверьте развертывание**: чтобы проверить состояние развертывания и увидеть созданные им модули, выполните:
 
-   ```bash
-   kubectl get deployments
-   ```
+```bash
+kubectl get deployments
+```
 
-   You should see output indicating that the `nginx-deployment` is running.
+Вы должны увидеть вывод, указывающий на то, что `nginx-deployment` запущен.
 
-4. **List the Pods**: To see the Pods created by the Deployment, use:
+4. **Список модулей**: чтобы увидеть созданные развертыванием модули, используйте:
 
-   ```bash
-   kubectl get pods
-   ```
+```bash
+kubectl get pods
+```
 
-   You should see one or more Pods with names starting with `nginx-deployment`.
+Вы должны увидеть один или несколько модулей с именами, начинающимися с `nginx-deployment`.
 
-## Step 2: Expose the Deployment as a Service
+## Шаг 2: Установите развертывание как службу
 
-Now that you have a Deployment running, you can expose it as a Service to make it accessible from outside the cluster.
+Теперь, когда у вас запущено развертывание, вы можете предоставить его как службу, чтобы сделать его доступным извне кластера.
 
-1. **Expose the Deployment**: Run the following command to create a Service that exposes the Nginx Deployment:
+1. **Открыть развертывание**: выполните следующую команду, чтобы создать службу, которая открывает развертывание Nginx:
 
-   ```bash
-   kubectl expose deployment nginx-deployment --type=NodePort --port=80
-   ```
+```bash
+kubectl expose deployment nginx-deployment --type=NodePort --port=80
+```
 
-   - The `--type=NodePort` option exposes the Service on a static port on each Node in the cluster.
-   - The `--port=80` option specifies that the Service will listen on port 80.
+- Параметр `--type=NodePort` открывает службу на статическом порту на каждом узле в кластере.
+- Параметр `--port=80` указывает, что служба будет прослушивать порт 80.
 
-2. **Verify the Service**: To check the status of the Service, use:
+2. **Проверка службы**: чтобы проверить состояние службы, используйте:
 
-   ```bash
-   kubectl get services
-   ```
+```bash
+kubectl get services
+```
 
-   You should see a Service named `nginx-deployment` with a `NodePort` assigned.
+Вы должны увидеть службу с именем `nginx-deployment` с назначенным `NodePort`.
 
-3. **Get the NodePort**: To find out which port has been assigned, look for the `PORT(S)` column in the output of the previous command. It will look something like `80:<NodePort>/TCP`.
+3. **Получить NodePort**: чтобы узнать, какой порт был назначен, найдите столбец `PORT(S)` в выводе предыдущей команды. Он будет выглядеть примерно так: `80:<NodePort>/TCP`.
 
-## Step 3: Access the Nginx Application
+## Шаг 3: Доступ к приложению Nginx
 
-1. **Get the Node IP Address**: To access the Nginx application, you need the IP address of one of the Nodes in your cluster. If you are using Minikube, you can get the IP address by running:
+1. **Получить IP-адрес узла**: Для доступа к приложению Nginx вам понадобится IP-адрес одного из узлов в вашем кластере. Если вы используете Minikube, вы можете получить IP-адрес, запустив:
 
-   ```bash
-   minikube ip
-   ```
+```bash
+minikube ip
+```
 
-   If you are using Docker Desktop, you can access the application using `localhost`.
+Если вы используете Docker Desktop, вы можете получить доступ к приложению, используя `localhost`.
 
-2. **Access the Application**: Open your web browser and navigate to `http://<Node-IP>:<NodePort>`. Replace `<Node-IP>` with the IP address you obtained and `<NodePort>` with the port number from the Service.
+2. **Получить доступ к приложению**: Откройте веб-браузер и перейдите по адресу `http://<Node-IP>:<NodePort>`. Замените `<Node-IP>` на полученный вами IP-адрес, а `<NodePort>` на номер порта из службы.
 
-   You should see the Nginx welcome page, indicating that your application is running successfully.
+Вы должны увидеть страницу приветствия Nginx, указывающую на то, что ваше приложение успешно запущено.
 
-## Step 4: Clean Up Resources
+## Шаг 4: Очистка ресурсов
 
-After testing your application, you can clean up the resources you created.
+После тестирования приложения вы можете очистить созданные вами ресурсы.
 
-1. **Delete the Service**:
+1. **Удалите службу**:
 
-   ```bash
-   kubectl delete service nginx-deployment
-   ```
+```bash
+kubectl delete service nginx-deployment
+```
 
-2. **Delete the Deployment**:
+2. **Удалите развертывание**:
 
-   ```bash
-   kubectl delete deployment nginx-deployment
-   ```
+```bash
+kubectl delete deployment nginx-deployment
+```
 
-3. **Verify Deletion**: To ensure that the resources have been deleted, you can run:
+3. **Проверка удаления**: Чтобы убедиться, что ресурсы удалены, вы можете запустить:
 
-   ```bash
-   kubectl get deployments
-   kubectl get services
-   ```
+```bash
+kubectl get deployments
+kubectl get services
+```
 
-   You should see no resources listed for the `nginx-deployment`.
+Вы не должны увидеть никаких ресурсов, перечисленных для `nginx-deployment`.
 
-## Conclusion
+## Заключение
 
-In this lesson, you learned how to deploy a simple application on Kubernetes using a Deployment and expose it as a Service. You explored the concepts of Pods, Deployments, and Services, gaining hands-on experience with Kubernetes. In the next lesson, we will dive deeper into scaling applications and managing updates in Kubernetes.
+В этом уроке вы узнали, как развернуть простое приложение в Kubernetes с помощью развертывания и предоставить его в качестве службы. Вы изучили концепции Pods, Deployments и Services, получив практический опыт работы с Kubernetes. На следующем уроке мы углубимся в масштабирование приложений и управление обновлениями в Kubernetes.
