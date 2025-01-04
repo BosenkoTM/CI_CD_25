@@ -1,381 +1,383 @@
-# Lesson 24: Final Project: Building and Deploying a Full-Stack Application
+# Урок 24: Финальный проект. Создание и развертывание полнофункционального приложения
 
-## Introduction to the Final Project
+## Введение в финальный проект
 
-In this final project, you will apply everything you've learned throughout the course to build and deploy a full-stack application using Docker and Kubernetes. This project will involve creating a simple web application with a frontend and a backend, containerizing the application using Docker, and deploying it to a Kubernetes cluster. By the end of this lesson, you will have a complete understanding of how to integrate all the concepts covered in the course.
+В этом финальном проекте вы примените все, чему научились на протяжении курса, для создания и развертывания полнофункционального приложения с использованием Docker и Kubernetes. Этот проект будет включать создание простого веб-приложения с фронтендом и бэкендом, контейнеризацию приложения с использованием Docker и развертывание его в кластере Kubernetes. К концу этого урока вы будете иметь полное представление о том, как интегрировать все концепции, рассмотренные в курсе.
 
-## Project Overview
+## Обзор проекта
 
-### Application Architecture
+### Архитектура приложения
 
-For this project, we will create a simple full-stack application that consists of:
+Для этого проекта мы создадим простое полнофункциональное приложение, которое состоит из:
 
-1. **Frontend**: A React application that interacts with the backend API.
-2. **Backend**: A Node.js/Express application that serves data to the frontend.
-3. **Database**: A MongoDB database to store application data.
+1. **Фронтенд**: приложение React, взаимодействующее с API бэкенда.
+2. **Бэкенд**: приложение Node.js/Express, которое обслуживает данные во фронтенде.
+3. **База данных**: база данных MongoDB для хранения данных приложения.
 
-### Technology Stack
+### Технологический стек
 
-- **Frontend**: React
-- **Backend**: Node.js with Express
-- **Database**: MongoDB
-- **Containerization**: Docker
-- **Orchestration**: Kubernetes
-- **Cloud Provider**: (Optional) Deploy to a cloud provider like AWS, GCP, or Azure, or run locally using Minikube.
+- **Фронтенд**: React
+- **Бэкенд**: Node.js с Express
+- **База данных**: MongoDB
+- **Контейнеризация**: Docker
+- **Оркестровка**: Kubernetes
+- **Поставщик облака**: (необязательно) Развертывание на облачном поставщике, таком как AWS, GCP или Azure, или запуск локально с помощью Minikube.
 
-## Step 1: Setting Up the Project Structure
+## Шаг 1: Настройка структуры проекта
 
-1. **Create a Project Directory**:
+1. **Создайте каталог проекта**:
 
-   ```bash
-   mkdir fullstack-app
-   cd fullstack-app
-   ```
+```bash
+mkdir fullstack-app
+cd fullstack-app
+```
 
-2. **Create Subdirectories**:
+2. **Создайте подкаталоги**:
 
-   ```bash
-   mkdir frontend backend
-   ```
+```bash
+mkdir frontend backend
+```
 
-## Step 2: Building the Backend
+## Шаг 2: Сборка бэкенда
 
-### 1. Create the Backend Application
+### 1. Создайте приложение бэкенда
 
-1. **Navigate to the Backend Directory**:
+1. **Перейдите в каталог бэкенда**:
 
-   ```bash
-   cd backend
-   ```
+```bash
+cd backend
+```
 
-2. **Initialize a Node.js Application**:
+2. **Инициализируйте приложение Node.js**:
 
-   ```bash
-   npm init -y
-   ```
+```bash
+npm init -y
+```
 
-3. **Install Dependencies**:
+3. **Установите зависимости**:
 
-   ```bash
-   npm install express mongoose cors
-   ```
+```bash
+npm install express mongoose cors
+```
 
-4. **Create the Server File**:
+4. **Создайте файл сервера**:
 
-   Create a file named `server.js` and add the following code:
+Создайте файл с именем `server.js` и добавьте следующий код:
 
-   ```javascript
-   const express = require('express');
-   const mongoose = require('mongoose');
-   const cors = require('cors');
+```javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-   const app = express();
-   const PORT = process.env.PORT || 5000;
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-   app.use(cors());
-   app.use(express.json());
+app.use(cors());
+app.use(express.json());
 
-   // MongoDB connection
-   mongoose.connect('mongodb://mongo:27017/mydatabase', {
-       useNewUrlParser: true,
-       useUnifiedTopology: true,
-   });
+// Подключение MongoDB
+mongoose.connect('mongodb://mongo:27017/mydatabase', {
+useNewUrlParser: true,
+useUnifiedTopology: true,
+});
 
-   const ItemSchema = new mongoose.Schema({
-       name: String,
-   });
+const ItemSchema = new mongoose.Schema({
+name: String,
+});
 
-   const Item = mongoose.model('Item', ItemSchema);
+const Item = mongoose.model('Item', ItemSchema);
 
-   app.get('/items', async (req, res) => {
-       const items = await Item.find();
-       res.json(items);
-   });
+app.get('/items', async (req, res) => {
+const items = await Item.find();
+res.json(items);
+});
 
-   app.post('/items', async (req, res) => {
-       const newItem = new Item(req.body);
-       await newItem.save();
-       res.json(newItem);
-   });
+app.post('/items', async (req, res) => {
+const newItem = new Item(req.body);
+await newItem.save();
+res.json(newItem);
+});
 
-   app.listen(PORT, () => {
-       console.log(`Server is running on port ${PORT}`);
-   });
-   ```
+app.listen(PORT, () => {
+console.log(`Сервер работает на порту ${PORT}`);
+});
+```
 
-5. **Create a Dockerfile**:
+5. **Создайте Dockerfile**:
 
-   Create a file named `Dockerfile` in the backend directory with the following content:
+Создайте файл с именем `Dockerfile` в каталоге backend со следующим содержимым:
 
-   ```dockerfile
-   FROM node:14
-   WORKDIR /app
-   COPY package*.json ./
-   RUN npm install
-   COPY . .
-   CMD ["node", "server.js"]
-   ```
+```dockerfile
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["node", "server.js"]
+```
 
-## Step 3: Building the Frontend
+## Шаг 3: Создание фронтенда
 
-### 1. Create the Frontend Application
+### 1. Создание фронтенд-приложения
 
-1. **Navigate to the Frontend Directory**:
+1. **Перейдите в каталог фронтенда**:
 
-   ```bash
-   cd ../frontend
-   ```
+```bash
+cd ../frontend
+```
 
-2. **Create a React Application**:
+2. **Создайте приложение React**:
 
-   You can use Create React App to set up the frontend:
+Вы можете использовать Create React App для настройки фронтенда:
 
-   ```bash
-   npx create-react-app .
-   ```
+```bash
+npx create-react-app .
+```
 
-3. **Install Axios**:
+3. **Установите Axios**:
 
-   Install Axios for making HTTP requests:
+Установите Axios для выполнения HTTP-запросов:
 
-   ```bash
-   npm install axios
-   ```
+```bash
+npm install axios
+```
 
-4. **Update the App Component**:
+4. **Обновите компонент приложения**:
 
-   Replace the contents of `src/App.js` with the following code:
+Замените содержимое `src/App.js` следующим кодом:
 
-   ```javascript
-   import React, { useEffect, useState } from 'react';
-   import axios from 'axios';
+```javascript
+import React, { useEffect, useState } from 'react';
+импортировать axios из 'axios';
 
-   function App() {
-       const [items, setItems] = useState([]);
-       const [itemName, setItemName] = useState('');
+function App() {
+const [items, setItems] = useState([]);
+const [itemName, setItemName] = useState('');
 
-       useEffect(() => {
-           fetchItems();
-       }, []);
+useEffect(() => {
+fetchItems();
+}, []);
 
-       const fetchItems = async () => {
-           const response = await axios.get('http://localhost:5000/items');
-           setItems(response.data);
-       };
+const fetchItems = async () => {
+const response = await axios.get('http://localhost:5000/items');
+setItems(response.data);
+};
 
-       const addItem = async () => {
-           await axios.post('http://localhost:5000/items', { name: itemName });
-           setItemName('');
-           fetchItems();
-       };
+const addItem = async () => {
+await axios.post('http://localhost:5000/items', { name: itemName });
+setItemName('');
+fetchItems();
+};
 
-       return (
-           <div>
-               <h1>Items</h1>
-               <input
-                   type="text"
-                   value={itemName}
-                   onChange={(e) => setItemName(e.target.value)}
-               />
-               <button onClick={addItem}>Add Item</button>
-               <ul>
-                   {items.map((item) => (
-                       <li key={item._id}>{item.name}</li>
-                   ))}
-               </ul>
-           </div>
-       );
-   }
+return (
+<div>
+<h1>Элементы</h1>
+<input
+type="text"
+value={itemName}
+onChange={(e) => setItemName(e.target.value)}
+/>
+<button onClick={addItem}>Добавить элемент</button>
+<ul>
+{items.map((item) => (
+<li key={item._id}>{item.name}</li>
+))}
+</ul>
+</div>
+);
+}
 
-   export default App;
-   ```
+export default App;
+```
 
-5. **Create a Dockerfile**:
+5. **Создайте Dockerfile**:
 
-   Create a file named `Dockerfile` in the frontend directory with the following content:
+Создайте файл с именем `Dockerfile` в каталоге frontend со следующим содержимым:
 
-   ```dockerfile
-   FROM node:14
-   WORKDIR /app
-   COPY package*.json ./
-   RUN npm install
-   COPY . .
-   RUN npm run build
-   CMD ["npx", "serve", "-s", "build"]
-   ```
+```dockerfile
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+CMD ["npx", "serve", "-s", "build"]
+```
 
-## Step 4: Creating Kubernetes Manifests
+## Шаг 4: Создание манифестов Kubernetes
 
-### 1. Create a Kubernetes Deployment for MongoDB
+### 1. Создайте развертывание Kubernetes для MongoDB
 
-Create a file named `mongo-deployment.yaml`:
+Создайте файл с именем `mongo-deployment.yaml`:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo
+name: mongo
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongo
-  template:
-    metadata:
-      labels:
-        app: mongo
-    spec:
-      containers:
-      - name: mongo
-        image: mongo:latest
-        ports:
-        - containerPort: 27017
+replicas: 1
+selector:
+matchLabels:
+app: mongo
+template:
+metadata:
+labels:
+app: mongo
+spec:
+containers:
+- name: mongo
+image: mongo:latest
+ports:
+- containerPort: 27017
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
+name: mongo
 spec:
-  ports:
-  - port: 27017
-  selector:
-    app: mongo
+ports:
+- port: 27017
+selector:
+app: mongo
 ```
 
-### 2. Create a Kubernetes Deployment for the Backend
+### 2. Создайте Развертывание Kubernetes для бэкенда
 
-Create a file named `backend-deployment.yaml`:
+Создайте файл с именем `backend-deployment.yaml`:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+name: backend
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: backend
-  template:
-    metadata:
-      labels:
-        app: backend
-    spec:
-      containers:
-      - name: backend
-        image: <your-dockerhub-username>/backend:latest
-        ports:
-        - containerPort: 5000
-        env:
-        - name: MONGO_URI
-          value: "mongodb://mongo:27017/mydatabase"
+replicas: 1
+selector:
+matchLabels:
+app: backend
+template:
+metadata:
+labels:
+app: backend
+spec:
+containers:
+- name: backend
+image: <your-dockerhub-username>/backend:latest
+ports:
+- containerPort: 5000
+env:
+- name: MONGO_URI
+value: "mongodb://mongo:27017/mydatabase"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+name: backend
 spec:
-  ports:
-  - port: 5000
-  selector:
-    app: backend
+ports:
+- port: 5000
+selector:
+app: бэкенд
 ```
 
-### 3. Create a Kubernetes Deployment for the Frontend
+### 3. Создайте развертывание Kubernetes для фронтенда
 
-Create a file named `frontend-deployment.yaml`:
+Создайте файл с именем `frontend-deployment.yaml`:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+name: frontend
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-      - name: frontend
-        image: <your-dockerhub-username>/frontend:latest
-        ports:
-        - containerPort: 3000
+replicas: 1
+selector:
+matchLabels:
+app: frontend
+template:
+metadata:
+labels:
+app: frontend
+spec:
+containers:
+- name: frontend
+image: <your-dockerhub-username>/frontend:latest
+ports:
+- containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+name: frontend
 spec:
-  ports:
-  - port: 3000
-  selector:
-    app: frontend
+ports:
+- port: 3000
+selector:
+app: frontend
 ```
 
-## Step 5: Building and Pushing Docker Images
+## Шаг 5. Создание и отправка образов Docker
 
-1. **Build the Docker Images**:
+1. **Создайте образы Docker**:
 
-   Navigate to the backend and frontend directories and build the Docker images:
+Перейдите в каталоги backend и frontend и соберите образы Docker:
 
-   ```bash
-   # For Backend
-   cd backend
-   docker build -t <your-dockerhub-username>/backend:latest .
+```bash
+# Для Backend
+cd backend
+docker build -t <your-dockerhub-username>/backend:latest .
 
-   # For Frontend
-   cd ../frontend
-   docker build -t <your-dockerhub-username>/frontend:latest .
-   ```
+# Для Frontend
+cd ../frontend
+docker build -t <your-dockerhub-username>/frontend:latest .
 
-2. **Push the Docker Images to Docker Hub**:
+```
 
-   ```bash
-   docker push <your-dockerhub-username>/backend:latest
-   docker push <your-dockerhub-username>/frontend:latest
-   ```
+2. **Отправьте образы Docker в Docker Hub**:
 
-## Step 6: Deploying to Kubernetes
+```bash
+docker push <your-dockerhub-username>/backend:latest
+docker push <your-dockerhub-username>/frontend:latest
+```
 
-1. **Apply the MongoDB Deployment**:
+## Шаг 6: Развертывание в Kubernetes
 
-   ```bash
-   kubectl apply -f mongo-deployment.yaml
-   ```
+1. **Примените развертывание MongoDB**:
 
-2. **Apply the Backend Deployment**:
+```bash
+kubectl apply -f mongo-deployment.yaml
+```
 
-   ```bash
-   kubectl apply -f backend-deployment.yaml
-   ```
+2. **Примените развертывание бэкенда**:
 
-3. **Apply the Frontend Deployment**:
+```bash
+kubectl apply -f backend-deployment.yaml
+```
 
-   ```bash
-   kubectl apply -f frontend-deployment.yaml
-   ```
+3. **Примените развертывание фронтенда**:
 
-## Step 7: Accessing the Application
+```bash
+kubectl apply -f frontend-deployment.yaml
+```
 
-1. **Get the Frontend Service URL**:
+## Шаг 7: Доступ к приложению
 
-   If you are using Minikube, you can access the frontend service using:
+1. **Получить URL-адрес службы фронтенда**:
 
-   ```bash
-   minikube service frontend
-   ```
+Если вы используете Minikube, вы можете получить доступ к службе фронтенда с помощью:
 
-   If you are using a cloud provider, you may need to configure an Ingress or use the LoadBalancer service type to access the frontend.
+```bash
+ minikube service frontend
+```
 
-2. **Test the Application**:
+Если вы используете облако, может потребоваться настроить Ingress или использовать тип службы LoadBalancer для доступа к фронтенду.
 
-   Open your web browser and navigate to the URL provided by the previous command. You should be able to add items to the list and see them displayed.
+2. **Протестируйте приложение**:
 
-## Conclusion
+Откройте веб-браузер и перейдите по URL-адресу, предоставленному предыдущей командой. Вы должны иметь возможность добавлять элементы в список и видеть их отображение.
 
-In this lesson, you built and deployed a full-stack application using Docker and Kubernetes. You created a React frontend, a Node.js backend, and a MongoDB database, containerized each component, and deployed them to a Kubernetes cluster. This project demonstrates how to integrate the concepts learned throughout the course and provides a foundation for building more complex applications in the future. In the next lesson, we will summarize the key concepts covered throughout the course and discuss next steps for further learning and exploration.
+## Заключение
+
+В этом уроке вы создали и развернули полнофункциональное приложение с использованием Docker и Kubernetes. Вы создали фронтенд React, бэкенд Node.js и базу данных MongoDB, контейнеризировали каждый компонент и развернули их в кластере Kubernetes. Этот проект демонстрирует, как интегрировать концепции, изученные в ходе курса, и обеспечивает основу для создания более сложных приложений в будущем. На следующем уроке мы обобщим основные концепции, рассмотренные в ходе курса, и обсудим следующие шаги для дальнейшего обучения и изучения.
+
