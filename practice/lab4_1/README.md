@@ -58,7 +58,7 @@ eval $(minikube docker-env)
 ```commandline
 docker build -t fastapi-app:local .
 ```
-![image](/practice/lab4_1/docs/1.png)
+![image](https://github.com/BosenkoTM/CI_CD_25/blob/main/practice/lab4_1/docs/1.png)
 ___
 
 ```commandline
