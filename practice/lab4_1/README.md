@@ -105,7 +105,7 @@ minikube service fastapi-service --url
 http://192.168.49.2:30001/docs
 ```
 
-![image](/practice/lab4/docs/33.png)
+![image](/practice/lab4_1/docs/33.png)
 ___
 ```commandline
 kubectl get pods
