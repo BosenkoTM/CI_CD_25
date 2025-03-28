@@ -65,6 +65,7 @@ sudo snap install kubectl --classic
 ___
 ### Запуск
 
+```commandline
 cd lab4_1
 ```
   
