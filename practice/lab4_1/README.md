@@ -47,7 +47,7 @@ cd lab4_1
 ```
   
 ```commandline
-minikube start
+minikube start --memory=2048mb --driver=docker 
 ```
 ![image](https://github.com/BosenkoTM/CI_CD_25/blob/main/practice/lab4_1/docs/1.png)
 **Билдим локальный образ и загружаем его в Minikube:**
