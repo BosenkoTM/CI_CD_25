@@ -60,6 +60,7 @@ docker build -t fastapi-app:local .
 ```
 ![image](/practice/lab4_1/docs/1.png)
 ___
+
 ```commandline
 kubectl create -f configmap.yml
 kubectl create -f secret.yml
@@ -67,6 +68,7 @@ kubectl create -f fastapi-deployment-and-service.yml
 kubectl create -f redis-deployment-and-service.yml
 ```
 ![image](/practice/lab4_1/docs/2.png)
+
 ![image](/practice/lab4_1/docs/4.png)
 ___
 **OpenAPI:**
@@ -75,8 +77,9 @@ minikube service fastapi-service --url
 ```
 Пример:
 ```commandline
-http://127.0.0.1:58315/docs
+http://192.168.49.2:30001/docs
 ```
+
 ![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/3.png)
 ___
 ```commandline
