@@ -41,7 +41,7 @@
 - **main.py**
   - Простое приложение, которое подключается к Redis и увеличивает счетчик при каждом запросе к корневому URL (/).
 
-### Установка minikube(на ВМ установлено).
+### Установка minikube.
 ```commandline
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 ```
@@ -50,12 +50,12 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
-### Добавление пользователя в группу Docker (на ВМ установлено).
+### Добавление пользователя в группу Docker.
 ```commandline
 sudo usermod -aG docker $USER && newgrp docker
 ```
 
-### Установка kubectl (на ВМ установлено).
+### Установка kubectl.
 kubectl — это командный инструмент для управления кластерами Kubernetes. 
 
 ```commandline
