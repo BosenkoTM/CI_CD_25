@@ -50,10 +50,11 @@ cd lab4_1
 minikube start
 ```
 **Билдим локальный образ и загружаем его в Minikube:**
-- Используется для настройки окружения командной строки Windows (cmd) для работы с Docker, который управляется Minikube.
+- Используется для настройки окружения командной строки Ubuntu для работы с Docker, который управляется Minikube.
 ```commandline
-@FOR /f "tokens=*" %i IN ('minikube docker-env --shell cmd') DO @%i
+eval $(minikube docker-env)
 ```
+
 ```commandline
 docker build -t fastapi-app:local .
 ```
