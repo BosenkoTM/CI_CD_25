@@ -58,7 +58,7 @@ eval $(minikube docker-env)
 ```commandline
 docker build -t fastapi-app:local .
 ```
-![image](/docs/1.png)
+![image](/practice/lab4_1/docs/1.png)
 ___
 ```commandline
 kubectl create -f configmap.yml
