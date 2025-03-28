@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: alpine
+  name: alpine
+  namespace: default
+spec:
+  containers:
+    - args:
+        - sleep
+        - "30"
+      image: alpine
+      name: alpine
+      imagePullPolicy: IfNotPresent

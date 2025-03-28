@@ -1,0 +1,42 @@
+@startmindmap kubeadm
+<style>
+
+node {
+    Margin 4
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+}
+
+rootNode {
+    Margin 12
+    HorizontalAlignment center
+    BackgroundColor gold
+    LineThickness 1.0
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 6
+    Margin 4
+}
+</style>
++ kubeadm
+++ cert
++++ renew
+-- completion
+++ config
+++ init
+++ reset
+-- join
+++ token
++++ list
++++ create
++++ delete
+-- version
+-- upgrade
+--- plan
+--- apply
+--- node
+@endmindmap
