@@ -105,30 +105,24 @@ minikube service fastapi-service --url
 http://192.168.49.2:30001/docs
 ```
 
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/3.png)
+![image](/practicelab4/docs/3.png)
 ___
 ```commandline
 kubectl get pods
 ```
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/1.png)
-___
-```commandline
-kubectl get configmap
-kubectl get deployment
-kubectl get secret
-kubectl get service
+
 ```
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/5.png)
+![image](/practice/lab4_1/docs/5.png)
 ___
 ```commandline
 kubectl describe pod <pod_name>
 ```
 
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/6.png)
+![image](/practice/lab4_1/docs/6.png)
 
 ___
 ```commandline
 kubectl config view
 ```
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/7.png)
+![image](/practice/lab4_1/7.png)
 ___
