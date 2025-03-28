@@ -66,8 +66,8 @@ kubectl create -f secret.yml
 kubectl create -f fastapi-deployment-and-service.yml
 kubectl create -f redis-deployment-and-service.yml
 ```
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/2.png)
-![image](https://github.com/AndreyPriv/containerization_and_orchestration_itmo/blob/main/lab4/docs/4.png)
+![image](/practice/lab4_1/docs/2.png)
+![image](/practice/lab4_1/docs/4.png)
 ___
 **OpenAPI:**
 ```commandline
