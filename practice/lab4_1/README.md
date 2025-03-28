@@ -49,6 +49,7 @@ cd lab4_1
 ```commandline
 minikube start
 ```
+![image](https://github.com/BosenkoTM/CI_CD_25/blob/main/practice/lab4_1/docs/1.png)
 **Билдим локальный образ и загружаем его в Minikube:**
 - Используется для настройки окружения командной строки Ubuntu для работы с Docker, который управляется Minikube.
 ```commandline
@@ -58,8 +59,6 @@ eval $(minikube docker-env)
 ```commandline
 docker build -t fastapi-app:local .
 ```
-![image](https://github.com/BosenkoTM/CI_CD_25/blob/main/practice/lab4_1/docs/1.png)
-___
 
 ```commandline
 kubectl create -f configmap.yml
@@ -67,7 +66,10 @@ kubectl create -f secret.yml
 kubectl create -f fastapi-deployment-and-service.yml
 kubectl create -f redis-deployment-and-service.yml
 ```
+
 ![image](/practice/lab4_1/docs/2.png)
+___
+
 
 ![image](/practice/lab4_1/docs/4.png)
 ___
