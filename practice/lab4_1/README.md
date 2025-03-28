@@ -118,7 +118,7 @@ ___
 kubectl describe pod <pod_name>
 ```
 
-![image](/practice/lab4_1/docs/6.png)
+![image](/practice/lab4_1/docs/66.png)
 
 ___
 ```commandline
