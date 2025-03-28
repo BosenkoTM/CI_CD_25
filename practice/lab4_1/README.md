@@ -1,6 +1,51 @@
 ##  Сервис Kubernetes 1 часть. (Практические работы 3.2, 4.1.)
-### Задача
-Развернуть свой собственный сервис в `Kubernetes`
+
+### Цель работы
+Получить практические навыки работы с кластером Kubernetes, включая развертывание базовых компонентов, настройку мониторинга и работу с service mesh.
+
+### Задачи
+- Изучить основные концепции Kubernetes через практические вопросы.
+- Научиться анализировать и применять манифесты Kubernetes.
+
+### Используемое ПО
+- K3s (облегченная версия Kubernetes).
+- Kubernetes Dashboard.
+Minicube.
+
+## Групповые задания
+
+### Задание 1. Теоретические основы Kubernetes.
+
+Ответить на 3 случайных вопроса из репозиториев:
+
+https://github.com/bregman-arie/devops-exercises/blob/master/topics/kubernetes/CKA.md
+
+https://github.com/bregman-arie/devops-exercises/blob/master/topics/kubernetes/README.md#kubernetes-questions
+
+Продемонстрировать понимание базовых концепций K8s
+
+### Задание 2.   Развертывание локального кластера на Kubernetes с использованием MiniKube
+2.1. Установите MiniKube, выполнить 1 и 2 шаг из инструкции https://minikube.sigs.k8s.io/docs/start/
+
+2.2. Установите kubectl https://kubernetes.io/ru/docs/tasks/tools/install-kubectl/
+
+2.3. Убедитесь, что kubectl работает и произведите осмотрите кластера:
+
+```commandline
+    kubectl get node
+    kubectl get po
+    kubectl get po -A
+    kubectl get svc
+```
+
+2.4. Установите графический интерфейс Dashboard https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/ - необходимо выполнить шаги Deploying the Dashboard UI и Accessing the Dashboard UI. В последнем не забудьте кликнуть по ссылке creating a sample user и выполнить там инструкции.
+
+2.5. Кластер готов! Шпаргалка по командам: https://kubernetes.io/ru/docs/reference/kubectl/cheatsheet/
+
+
+### Практическая задача
+
+Развернуть  собственный сервис в `Kubernetes`
 
 **Можно использовать Minikube  Нужно развернуть сервис в связке из минимум 2 контейнеров + 1 init.
 Требования:**
