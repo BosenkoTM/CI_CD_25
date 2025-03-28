@@ -40,9 +40,31 @@
   - Используется для хранения конфиденциальных данных. В данном случае, хранится секретный ключ SECRET_KEY
 - **main.py**
   - Простое приложение, которое подключается к Redis и увеличивает счетчик при каждом запросе к корневому URL (/).
+
+### Установка minikube(на ВМ установлено).
+```commandline
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+```
+
+```commandline
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+### Добавление пользователя в группу Docker (на ВМ установлено).
+```commandline
+sudo usermod -aG docker $USER && newgrp docker
+```
+
+### Установка kubectl (на ВМ установлено).
+kubectl — это командный инструмент для управления кластерами Kubernetes. 
+
+```commandline
+sudo snap install kubectl --classic
+```
+
 ___
 ### Запуск
-```commandline
+
 cd lab4_1
 ```
   
