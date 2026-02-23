@@ -1,0 +1,62 @@
+# ============================================================
+# docker-compose.yml — Такси-парк: аналитическое приложение
+# Вариант 40 | Compose V2 (ключ version не используется)
+# ============================================================
+
+services:
+
+  # ---------- 1. База данных PostgreSQL ----------
+  db:
+    image: postgres:16-alpine
+    container_name: taxi_db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data        # именованный том
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ---------- 2. ETL-загрузчик (init-контейнер) ----------
+  loader:
+    build:
+      context: ./app
+    container_name: taxi_loader
+    entrypoint: ["python", "loader.py"]          # переопределяем CMD
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy               # ждём healthy БД
+    volumes:
+      - ./data:/data:ro                          # bind mount (только чтение)
+    networks:
+      - backend-network
+
+  # ---------- 3. Streamlit Dashboard ----------
+  dashboard:
+    build:
+      context: ./app
+    container_name: taxi_dashboard
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      loader:
+        condition: service_completed_successfully # ждём окончания загрузки
+    ports:
+      - "80:8501"                                # ТЗ: 8501 → 80 хоста
+    networks:
+      - backend-network
+
+# ---------- Именованные тома ----------
+volumes:
+  pg_data:
+
+# ---------- Изолированная сеть ----------
+networks:
+  backend-network:
+    driver: bridge
