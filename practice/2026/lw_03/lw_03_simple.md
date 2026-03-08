@@ -53,31 +53,33 @@ minikube start --driver=docker
 Решение состоит из трех основных вычислительных компонентов (БД, Аналитическое приложение, Загрузчик данных), взаимодействующих внутри кластера Kubernetes.
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 graph TD
-    subgraph K8s_Cluster [Kubernetes Cluster (Minikube)]
+    subgraph K8s_Cluster ["K8s Cluster"]
         
-        subgraph Configs [Configurations]
-            SEC[Secret <br/> db-secret]
-            CM[ConfigMap <br/> app-config]
-            SA[ServiceAccount <br/> taxi-heatmap-sa]
+        subgraph Configs ["Configs"]
+            SEC["SEC"]
+            CM["CM"]
+            SA["SA"]
         end
 
-        subgraph Database [Database Stateful Tier]
-            PVC[(PersistentVolumeClaim <br/> postgres-pvc)]
-            DB_POD(PostgreSQL Pod)
-            DB_SVC{Service <br/> db-service <br/> ClusterIP}
+        subgraph Database ["Database"]
+            PVC["PVC"]
+            DB_POD("PostgreSQL Pod")
+            DB_SVC{"DB_SVC"}
         end
 
-        subgraph App[Analytics Tier]
-            APP_POD(JupyterLab Pod <br/> InitContainer, Probes)
-            APP_SVC{Service <br/> app-service <br/> NodePort}
+        subgraph App["App"]
+            APP_POD("JupyterLab Pod<br/>InitContainer, Probes")
+            APP_SVC{"APP_SVC"}
         end
 
-        subgraph Batch[Data Ingestion]
-            JOB(Loader Job <br/> data-loader-job)
+        subgraph Batch["Batch"]
+            JOB("Loader Job<br/>data-loader-job")
         end
-
-        %% Connections
         SEC -.-> DB_POD
         SEC -.-> APP_POD
         SEC -.-> JOB
@@ -97,7 +99,7 @@ graph TD
         
     end
 
-    User((Analyst/User)) -->|Browser <br/> port 30088| APP_SVC
+    User(("Analyst/User")) -->|Browser <br/> port 30088| APP_SVC
 ```
 
 **Описание компонентов:**
@@ -440,3 +442,4 @@ m
 -[x] **Результат.** Тепловая карта загружена и отображается в JupyterLab корректно.
 
 ```
+
