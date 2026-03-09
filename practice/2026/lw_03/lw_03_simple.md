@@ -295,7 +295,10 @@ spec:
       initContainers:
       - name: wait-for-db
         image: busybox:1.28
-        command:['sh', '-c', 'until nc -z db-service 5432; do echo waiting for db; sleep 2; done;']
+        command:
+        - "sh"
+        - "-c"
+        - "until nc -z db-service 5432; do echo waiting for db; sleep 2; done;"
       
       containers:
       - name: jupyter
@@ -442,4 +445,5 @@ m
 -[x] **Результат.** Тепловая карта загружена и отображается в JupyterLab корректно.
 
 ```
+
 
