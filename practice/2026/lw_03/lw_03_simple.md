@@ -24,43 +24,53 @@
 ## 3. Архитектура решения
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 graph TD
-    subgraph K8s_Cluster ["K8s Cluster (Minikube)"]
+    subgraph K8s_Cluster ["K8s Cluster"]
+        
         subgraph Configs ["Configs"]
-            SEC["Secret: db-secret"]
-            CM["ConfigMap: app-config"]
-            SA["ServiceAccount: taxi-heatmap-sa"]
+            SEC["SEC"]
+            CM["CM"]
+            SA["SA"]
         end
 
-        subgraph Database ["Database Tier"]
-            PVC["PersistentVolumeClaim"]
+        subgraph Database ["Database"]
+            PVC["PVC"]
             DB_POD("PostgreSQL Pod")
-            DB_SVC{"Service: db-service"}
+            DB_SVC{"DB_SVC"}
         end
 
-        subgraph App ["Analytics Tier"]
-            APP_POD("JupyterLab Pod (InitContainer + Probes)")
-            APP_SVC{"Service: app-service"}
+        subgraph App["App"]
+            APP_POD("JupyterLab Pod<br/>InitContainer, Probes")
+            APP_SVC{"APP_SVC"}
         end
 
-        subgraph Batch ["Data Ingestion"]
-            JOB("Job: data-loader-job")
+        subgraph Batch["Batch"]
+            JOB("Loader Job<br/>data-loader-job")
         end
-
         SEC -.-> DB_POD
         SEC -.-> APP_POD
         SEC -.-> JOB
+        
         CM -.-> DB_POD
         CM -.-> APP_POD
         CM -.-> JOB
-        SA -.->|Attached via serviceAccountName| APP_POD
+        
+        SA -.->|Attached via<br/>serviceAccountName| APP_POD
+
         PVC --- DB_POD
+        
         DB_POD --- DB_SVC
         JOB -->|Writes data| DB_SVC
         APP_POD -->|Reads data| DB_SVC
         APP_POD -->|Waits for DB| DB_SVC
+        
     end
-    User(("Analyst/User")) -->|Browser (port 30088)| APP_SVC
+
+    User(("Analyst/User")) -->|Browser <br/> port 30088| APP_SVC
 ```
 
 ---
@@ -421,3 +431,4 @@ minikube delete
 *   `minikube image ls` — (после `minikube delete` команда выдаст ошибку, что кластер не найден).
 
 **Рекомендация:** Если ваша цель — просто перезапустить проект, достаточно сделать `kubectl delete -f k8s/` и `kubectl apply -f k8s/`. Полный `minikube delete` стоит делать только если кластер перестал отвечать или вы хотите полностью освободить ресурсы системы (RAM/Disk).
+
