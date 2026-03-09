@@ -396,32 +396,59 @@ spec:
 В открытом браузере, в Jupyter Notebook запускаем скрипт для построения тепловой карты поездок:
 
 ```python
+!pip install sqlalchemy psycopg2-binary pandas folium matplotlib seaborn
+```
+
+```python
 import os
-import psycopg2
 import pandas as pd
 import folium
 from folium.plugins import HeatMap
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sqlalchemy import create_engine
+```
 
-# Подключение к PostgreSQL через переменные из ConfigMap/Secret
-conn = psycopg2.connect(
-    host=os.getenv("DB_HOST"),
-    port=os.getenv("DB_PORT"),
-    dbname=os.getenv("POSTGRES_DB"),
-    user=os.getenv("POSTGRES_USER"),
-    password=os.getenv("POSTGRES_PASSWORD")
-)
+1. Формирование строки подключения для SQLAlchemy
 
-# Загрузка датасета
-df = pd.read_sql_query("SELECT lat, lon FROM taxi_trips;", conn)
-conn.close()
+db_url = f"postgresql+psycopg2://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('POSTGRES_DB')}"
+engine = create_engine(db_url)
+```
 
-# Отрисовка карты Folium
+2. Загрузка данных (теперь без warning)
+
+```python
+df = pd.read_sql("SELECT lat, lon FROM taxi_trips;", engine)
+```
+ ---  АНАЛИТИКА ---
+
+print(f"Всего поездок: {len(df)}")
+
+# Создаем фигуру с двумя подграфиками (ряд из 2 столбцов)
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# График 1. Широта (Latitude)
+sns.histplot(df['lat'], kde=True, color="skyblue", ax=axes[0])
+axes[0].set_title("Распределение широты (Latitude)")
+axes[0].set_xlabel("Широта")
+
+# График 2. Долгота (Longitude)
+sns.histplot(df['lon'], kde=True, color="salmon", ax=axes[1])
+axes[1].set_title("Распределение долготы (Longitude)")
+axes[1].set_xlabel("Долгота")
+
+plt.tight_layout()
+plt.show()
+```
+
+3. Визуализация. Тепловая карта
+
+```python
 m = folium.Map(location=[55.75, 37.61], zoom_start=11)
-heat_data = [[row['lat'], row['lon']] for index, row in df.iterrows()]
-HeatMap(heat_data, radius=15, blur=10).add_to(m)
+heat_data = df[['lat', 'lon']].values.tolist()
+HeatMap(heat_data, radius=12, blur=15).add_to(m)
 
-# Отображение
-m
+display(m)
 ```
 
 ---
@@ -445,5 +472,6 @@ m
 -[x] **Результат.** Тепловая карта загружена и отображается в JupyterLab корректно.
 
 ```
+
 
 
