@@ -411,6 +411,7 @@ from sqlalchemy import create_engine
 
 1. Формирование строки подключения для SQLAlchemy
 
+```python
 db_url = f"postgresql+psycopg2://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('POSTGRES_DB')}"
 engine = create_engine(db_url)
 ```
@@ -419,7 +420,6 @@ engine = create_engine(db_url)
 
 ```python
 df = pd.read_sql("SELECT lat, lon FROM taxi_trips;", engine)
-```
  ---  АНАЛИТИКА ---
 
 print(f"Всего поездок: {len(df)}")
@@ -472,6 +472,7 @@ display(m)
 -[x] **Результат.** Тепловая карта загружена и отображается в JupyterLab корректно.
 
 ```
+
 
 
 
