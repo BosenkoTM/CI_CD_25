@@ -24,54 +24,89 @@
 ## 3. Архитектура решения
 
 ```mermaid
----
-config:
-  layout: elk
----
 graph TD
-    subgraph K8s_Cluster ["K8s Cluster"]
+    %% Определение цветов
+    classDef config fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    classDef db fill:#e1f5fe,stroke:#0277bd,stroke-width:2px;
+    classDef app fill:#fff3e0,stroke:#ef6c00,stroke-width:2px;
+    classDef batch fill:#f1f8e9,stroke:#558b2f,stroke-width:2px;
+    classDef user fill:#ffebee,stroke:#c62828,stroke-width:2px;
+
+    subgraph K8s_Cluster ["K8s Cluster (Minikube)"]
         
-        subgraph Configs ["Configs"]
-            SEC["SEC"]
-            CM["CM"]
-            SA["SA"]
+        subgraph Configs ["Конфигурация"]
+            SEC["Secret"]
+            CM["ConfigMap"]
+            SA["ServiceAccount"]
         end
 
-        subgraph Database ["Database"]
-            PVC["PVC"]
+        subgraph Database ["Слой данных"]
+            PVC["PersistentVolumeClaim"]
             DB_POD("PostgreSQL Pod")
-            DB_SVC{"DB_SVC"}
+            DB_SVC{"DB_Service"}
         end
 
-        subgraph App["App"]
-            APP_POD("JupyterLab Pod<br/>InitContainer, Probes")
-            APP_SVC{"APP_SVC"}
+        subgraph Analytics ["Слой аналитики"]
+            APP_POD("JupyterLab Pod")
+            APP_SVC{"App_Service"}
         end
 
-        subgraph Batch["Batch"]
-            JOB("Loader Job<br/>data-loader-job")
+        subgraph Data ["Загрузка"]
+            JOB("Loader Job")
         end
-        SEC -.-> DB_POD
-        SEC -.-> APP_POD
-        SEC -.-> JOB
-        
-        CM -.-> DB_POD
-        CM -.-> APP_POD
-        CM -.-> JOB
-        
-        SA -.->|Attached via<br/>serviceAccountName| APP_POD
 
-        PVC --- DB_POD
-        
-        DB_POD --- DB_SVC
-        JOB -->|Writes data| DB_SVC
-        APP_POD -->|Reads data| DB_SVC
-        APP_POD -->|Waits for DB| DB_SVC
-        
+        %% Связи
+        SEC -.-> DB_POD:::config
+        SEC -.-> APP_POD:::config
+        CM -.-> DB_POD:::config
+        CM -.-> APP_POD:::config
+        SA -.-> APP_POD:::app
+        PVC --- DB_POD:::db
+        DB_POD --- DB_SVC:::db
+        JOB -->|Writes| DB_SVC:::batch
+        APP_POD -->|Reads| DB_SVC:::app
     end
 
-    User(("Analyst/User")) -->|Browser <br/> port 30088| APP_SVC
+    User(("Аналитик")) -->|Port 30088| APP_SVC:::user
+
+    %% Применение стилей
+    class SEC,CM,SA config;
+    class PVC,DB_POD,DB_SVC db;
+    class APP_POD,APP_SVC app;
+    class JOB batch;
+    class User user;
 ```
+
+### Таблица пояснения компонентов архитектуры
+
+| Блок | Компонент | Краткое пояснение |
+| :--- | :--- | :--- |
+| **Configs** | Secret/ConfigMap/SA | Хранилище паролей, настроек и прав доступа (`ServiceAccount` для RBAC). |
+| **Database** | PostgreSQL / PVC | База данных для хранения координат поездок. `PVC` обеспечивает сохранность данных. |
+| **Analytics** | JupyterLab | Аналитическая среда. Использует `InitContainer` для ожидания БД и `Probes` для проверки статуса. |
+| **Data** | Loader Job | Однократный процесс, наполняющий БД тестовыми данными о поездках. |
+| **User** | Analyst | Внешний пользователь, получающий доступ к JupyterLab через `NodePort` (порт 30088). |
+
+---
+
+### Рекомендации по оформлению отчета:
+1.  **Цветовая схема:** Mermaid-диаграмма выше использует разные цвета (синий для БД, оранжевый для приложения, зеленый для загрузки), что значительно упрощает чтение архитектуры при защите лабораторной.
+2.  **Лаконичность:** Таблица позволяет преподавателю за 10 секунд понять, за что отвечает каждый логический слой системы, не вчитываясь в длинные описания.
+3.  **Соответствие:** Эта архитектура полностью совпадает с вашими манифестами и логикой работы `Job` -> `DB` -> `App`.
+
+Этот блок информации вы можете вставить в раздел **"3. Архитектура решения"** вашего отчета.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -539,6 +574,7 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```bash
 minikube start --driver=docker 
 ```
+
 
 
 
