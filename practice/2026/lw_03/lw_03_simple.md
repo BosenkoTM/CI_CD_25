@@ -77,7 +77,7 @@ graph TD
 
 ## 4. Исходный код Docker-образов (Локальная сборка)
 
-### 4.1. Скрипт загрузки данных (Loader)
+### Скрипт загрузки данных (Loader)
 **Файл `loader/Dockerfile`:**
 ```dockerfile
 FROM python:3.10-slim
@@ -111,7 +111,7 @@ cur.close()
 conn.close()
 ```
 
-### 4.2. Образ JupyterLab
+### Образ JupyterLab
 **Файл `app/Dockerfile`:**
 ```dockerfile
 FROM jupyter/scipy-notebook:latest
@@ -123,7 +123,7 @@ ENV JUPYTER_ENABLE_LAB=yes
 
 ## 5. Манифесты Kubernetes
 
-### 5.1. `k8s/01-config-secret.yaml`
+### `k8s/01-config-secret.yaml`
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -162,7 +162,31 @@ metadata:
     app: taxi-app
 ```
 
-### 5.2. `k8s/04-db.yaml`
+### `k8s/02-pvc.yaml`
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+### `k8s/03-serviceaccount.yaml`
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: taxi-heatmap-sa
+  labels:
+    app: taxi-app
+```
+
+### `k8s/04-db.yaml`
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -431,4 +455,5 @@ minikube delete
 *   `minikube image ls` — (после `minikube delete` команда выдаст ошибку, что кластер не найден).
 
 **Рекомендация:** Если ваша цель — просто перезапустить проект, достаточно сделать `kubectl delete -f k8s/` и `kubectl apply -f k8s/`. Полный `minikube delete` стоит делать только если кластер перестал отвечать или вы хотите полностью освободить ресурсы системы (RAM/Disk).
+
 
