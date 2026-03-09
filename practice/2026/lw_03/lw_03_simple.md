@@ -454,7 +454,36 @@ minikube delete
 *   `kubectl get pvc` — должен вернуть `No resources found`.
 *   `minikube image ls` — (после `minikube delete` команда выдаст ошибку, что кластер не найден).
 
-**Рекомендация:** Если ваша цель — просто перезапустить проект, достаточно сделать `kubectl delete -f k8s/` и `kubectl apply -f k8s/`. Полный `minikube delete` стоит делать только если кластер перестал отвечать или вы хотите полностью освободить ресурсы системы (RAM/Disk).
+**Рекомендация:** 
+
+Если ваша цель — просто перезапустить проект, достаточно сделать `kubectl delete -f k8s/` и `kubectl apply -f k8s/`. 
+
+Полный `minikube delete` стоит делать только если кластер перестал отвечать или вы хотите полностью освободить ресурсы системы (RAM/Disk).
+
+
+## Установка minikube(на ВМ установлено)
+
+### Установка kubectl 
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
+```
+
+### Установка Minikube 
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+### Запуск Minikube с использованием Docker 
+
+```bash
+minikube start --driver=docker 
+```
+
+
 
 
 
